@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography.Pkcs;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using ApiFiscal.Models;
-using Newtonsoft.Json;
+using ApiFiscal.Models.Afip;
 using wsaa;
 
 namespace ApiFiscal.Services
@@ -61,7 +59,8 @@ namespace ApiFiscal.Services
                 HttpClient client = new HttpClient();
                 var httpContent = new StringContent(xml, Encoding.UTF8, "text/xml");
                 HttpResponseMessage response = client.PostAsync("https://wswhomo.afip.gov.ar/wsfev1/service.asmx?op=FECAESolicitar", httpContent).Result;
-                return response.Content.ReadAsStringAsync().Result;
+                var retorno = response.Content.ReadAsStringAsync().Result;
+                return retorno;
             }
             catch (Exception e)
             {
@@ -69,7 +68,7 @@ namespace ApiFiscal.Services
             }
         }
 
-        public Models.Afip.Envelope ObterTipoIva(string xml)
+        public EnvelopeFEParamGetTiposIva ObterTipoIva(string xml)
         {
             try
             {
@@ -78,9 +77,72 @@ namespace ApiFiscal.Services
                 HttpResponseMessage response = client.PostAsync("https://wswhomo.afip.gov.ar/wsfev1/service.asmx?op=FEParamGetTiposIva", httpContent).Result;
                 var result = response.Content.ReadAsStringAsync().Result;
 
-                XmlSerializer serializer = new XmlSerializer(typeof(Models.Afip.Envelope));
+                XmlSerializer serializer = new XmlSerializer(typeof(EnvelopeFEParamGetTiposIva));
                 StringReader rdr = new StringReader(result);
-                var resultingMessage = (Models.Afip.Envelope)serializer.Deserialize(rdr);
+                var resultingMessage = (EnvelopeFEParamGetTiposIva)serializer.Deserialize(rdr);
+
+                return resultingMessage;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        public EnvelopeFEParamGetTiposMonedas ObterTiposMonedas(string xml)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                var httpContent = new StringContent(xml, Encoding.UTF8, "text/xml");
+                HttpResponseMessage response = client.PostAsync("https://wswhomo.afip.gov.ar/wsfev1/service.asmx?op=FEParamGetTiposMonedas", httpContent).Result;
+                var result = response.Content.ReadAsStringAsync().Result;
+
+                XmlSerializer serializer = new XmlSerializer(typeof(EnvelopeFEParamGetTiposMonedas));
+                StringReader rdr = new StringReader(result);
+                var resultingMessage = (EnvelopeFEParamGetTiposMonedas)serializer.Deserialize(rdr);
+
+                return resultingMessage;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        public EnvelopeFEParamGetTiposCbte ObterTiposCbte(string xml)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                var httpContent = new StringContent(xml, Encoding.UTF8, "text/xml");
+                HttpResponseMessage response = client.PostAsync("https://wswhomo.afip.gov.ar/wsfev1/service.asmx?op=FEParamGetTiposCbte", httpContent).Result;
+                var result = response.Content.ReadAsStringAsync().Result;
+
+                XmlSerializer serializer = new XmlSerializer(typeof(EnvelopeFEParamGetTiposCbte));
+                StringReader rdr = new StringReader(result);
+                var resultingMessage = (EnvelopeFEParamGetTiposCbte)serializer.Deserialize(rdr);
+
+                return resultingMessage;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
+        public EnvelopeFEParamGetTiposDoc ObterTiposDoc(string xml)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                var httpContent = new StringContent(xml, Encoding.UTF8, "text/xml");
+                HttpResponseMessage response = client.PostAsync("https://wswhomo.afip.gov.ar/wsfev1/service.asmx?op=FEParamGetTiposDoc", httpContent).Result;
+                var result = response.Content.ReadAsStringAsync().Result;
+
+                XmlSerializer serializer = new XmlSerializer(typeof(EnvelopeFEParamGetTiposDoc));
+                StringReader rdr = new StringReader(result);
+                var resultingMessage = (EnvelopeFEParamGetTiposDoc)serializer.Deserialize(rdr);
 
                 return resultingMessage;
             }

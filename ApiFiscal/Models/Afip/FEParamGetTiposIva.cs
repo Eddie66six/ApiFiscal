@@ -37,7 +37,7 @@ namespace ApiFiscal.Models.Afip
     }
 
     [XmlRoot(ElementName = "ResultGet", Namespace = "http://ar.gov.afip.dif.FEV1/")]
-    public class ResultGet
+    public class ResultGetFEParamGetTiposIva
     {
         [XmlElement(ElementName = "IvaTipo", Namespace = "http://ar.gov.afip.dif.FEV1/")]
         public List<IvaTipo> IvaTipo { get; set; }
@@ -47,7 +47,7 @@ namespace ApiFiscal.Models.Afip
     public class FEParamGetTiposIvaResult
     {
         [XmlElement(ElementName = "ResultGet", Namespace = "http://ar.gov.afip.dif.FEV1/")]
-        public ResultGet ResultGet { get; set; }
+        public ResultGetFEParamGetTiposIva ResultGet { get; set; }
     }
 
     [XmlRoot(ElementName = "FEParamGetTiposIvaResponse", Namespace = "http://ar.gov.afip.dif.FEV1/")]
@@ -60,19 +60,19 @@ namespace ApiFiscal.Models.Afip
     }
 
     [XmlRoot(ElementName = "Body", Namespace = "http://schemas.xmlsoap.org/soap/envelope/")]
-    public class Body
+    public class BodyFEParamGetTiposIva
     {
         [XmlElement(ElementName = "FEParamGetTiposIvaResponse", Namespace = "http://ar.gov.afip.dif.FEV1/")]
         public FEParamGetTiposIvaResponse FEParamGetTiposIvaResponse { get; set; }
     }
 
     [XmlRoot(ElementName = "Envelope", Namespace = "http://schemas.xmlsoap.org/soap/envelope/")]
-    public class Envelope
+    public class EnvelopeFEParamGetTiposIva
     {
         [XmlElement(ElementName = "Header", Namespace = "http://schemas.xmlsoap.org/soap/envelope/")]
         public Header Header { get; set; }
         [XmlElement(ElementName = "Body", Namespace = "http://schemas.xmlsoap.org/soap/envelope/")]
-        public Body Body { get; set; }
+        public BodyFEParamGetTiposIva Body { get; set; }
         [XmlAttribute(AttributeName = "soap", Namespace = "http://www.w3.org/2000/xmlns/")]
         public string Soap { get; set; }
         [XmlAttribute(AttributeName = "xsi", Namespace = "http://www.w3.org/2000/xmlns/")]
