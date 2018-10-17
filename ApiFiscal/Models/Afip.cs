@@ -38,7 +38,7 @@ namespace ApiFiscal.Models
                                 "<ImpNeto>" + objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.ImpNeto.ToString().Replace(",", ".") + "</ImpNeto>" +
                                 "<ImpOpEx>" + objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.ImpOpEx + "</ImpOpEx>" +
                                 "<ImpTrib>" + objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.ImpTrib + "</ImpTrib>" +
-                                "<ImpIVA>" + objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.ImpIVA + "</ImpIVA>" +
+                                "<ImpIVA>" + objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.ImpIVA.ToString().Replace(",", ".") + "</ImpIVA>" +
                                 "<FchServDesde>" + objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.FchServDesde.ToString("yyyMMdd") + "</FchServDesde>" +
                                 "<FchServHasta>" + objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.FchServHasta.ToString("yyyMMdd") + "</FchServHasta>" +
                                 "<FchVtoPago>" + objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.FchVtoPago.ToString("yyyMMdd") + "</FchVtoPago>";
@@ -146,8 +146,8 @@ namespace ApiFiscal.Models
         /// 
         /// </summary>
         /// <param name="cantReg">Quantidade de registros dos detalhes do voucher ou lote de vouchers</param>
-        /// <param name="ptoVta">Ponto de Venda do voucher que está sendo reportado. Se mais de um recibo for informado, todos devem corresponder ao mesmo ponto de venda.</param>
-        /// <param name="cbteTipo">Tipo de voucher que está sendo relatado. Se mais de um recibo for informado, todos devem ser do mesmo tipo.</param>
+        /// <param name="ptoVta">Ponto de Venda do voucher que está sendo reportado. Se mais de um recibo for informado, todos devem corresponder ao mesmo ponto de venda. Obs: è oq esta na tabela PONTOS_DE_VENDA</param>
+        /// <param name="cbteTipo">Tipo de voucher que está sendo relatado. Se mais de um recibo for informado, todos devem ser do mesmo tipo. OBS: Com Factura A só pode ser usado o documento CUIT(CNPJ), campo RG no EVO. Com factura B somente DNI(CPF)</param>
         public FeCabReq(int cantReg, int ptoVta, int cbteTipo)
         {
             CantReg = cantReg;
@@ -253,8 +253,8 @@ namespace ApiFiscal.Models
         public AlicIva(int id, double baseImp, double importe)
         {
             Id = id;
-            BaseImp = baseImp;//new []{2, 3, 7, 8, 52, 53}.Contains(id) ? 0.0 : baseImp;
-            Importe = importe;
+            BaseImp = new []{2, 3, 7, 8, 52, 53}.Contains(id) ? 0.0 : baseImp;
+            Importe = new[] { 2, 3, 7, 8, 52, 53 }.Contains(id) ? 0.0 : importe;
         }
         public int Id { get; set; }
         public double BaseImp { get; set; }

@@ -177,5 +177,26 @@ namespace ApiFiscal.Services
                 throw new Exception(ID_FNC + "***Error al firmar: " + excepcionAlFirmar.Message);
             }
         }
+
+        public EnvelopeFEParamGetTiposTributos ObterTiposTributos(string xml)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                var httpContent = new StringContent(xml, Encoding.UTF8, "text/xml");
+                HttpResponseMessage response = client.PostAsync("https://wswhomo.afip.gov.ar/wsfev1/service.asmx?op=FEParamGetTiposTributos", httpContent).Result;
+                var result = response.Content.ReadAsStringAsync().Result;
+
+                XmlSerializer serializer = new XmlSerializer(typeof(EnvelopeFEParamGetTiposTributos));
+                StringReader rdr = new StringReader(result);
+                var resultingMessage = (EnvelopeFEParamGetTiposTributos)serializer.Deserialize(rdr);
+
+                return resultingMessage;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
     }
 }
