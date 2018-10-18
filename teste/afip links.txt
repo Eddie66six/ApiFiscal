@@ -1,0 +1,17 @@
+CUIT: 27129666612
+
+senha: solg2013
+
+http://www.afip.gob.ar/ws/WSASS/WSASS_como_adherirse.pdf
+http://www.afip.gob.ar/ws/introduccionwsapi.asp
+trocar 1024 por 2048
+
+
+
+------------
+https://github.com/reingart/pyafipws/
+
+
+doc api soap
+
+http://www.afip.gob.ar/fe/documentos/manual_desarrollador_COMPG_v2_12.pdf#page=8&zoom=100,0,294
