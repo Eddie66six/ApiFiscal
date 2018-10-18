@@ -18,8 +18,7 @@ namespace ApiFiscal.Controllers
         {
             var cuit = 27129666612;
             var afipApi = new AfipService();
-            //var login = afipApi.LoginAsync("C:\\Users\\Gui\\Desktop\\certificado.pfx", "w12");
-            //var login = afipApi.LoginAsync("C:\\DEV\\certificado.pfx", "w12");
+            //var login = afipApi.LoginAsync("..\\teste\\certificado.pfx", "w12");
 
             var auth = new Auth("PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/Pgo8c3NvIHZlcnNpb249IjIuMCI+CiAgICA8aWQgc3JjPSJDTj13c2FhaG9tbywgTz1BRklQLCBDPUFSLCBTRVJJQUxOVU1CRVI9Q1VJVCAzMzY5MzQ1MDIzOSIgZHN0PSJDTj13c2ZlLCBPPUFGSVAsIEM9QVIiIHVuaXF1ZV9pZD0iNDE5MTIxODgxNyIgZ2VuX3RpbWU9IjE1Mzk3OTY2OTUiIGV4cF90aW1lPSIxNTM5ODM5OTU1Ii8+CiAgICA8b3BlcmF0aW9uIHR5cGU9ImxvZ2luIiB2YWx1ZT0iZ3JhbnRlZCI+CiAgICAgICAgPGxvZ2luIGVudGl0eT0iMzM2OTM0NTAyMzkiIHNlcnZpY2U9IndzZmUiIHVpZD0iU0VSSUFMTlVNQkVSPUNVSVQgMjcxMjk2NjY2MTIsIENOPWd0ZXN0ZSIgYXV0aG1ldGhvZD0iY21zIiByZWdtZXRob2Q9IjIyIj4KICAgICAgICAgICAgPHJlbGF0aW9ucz4KICAgICAgICAgICAgICAgIDxyZWxhdGlvbiBrZXk9IjI3MTI5NjY2NjEyIiByZWx0eXBlPSI0Ii8+CiAgICAgICAgICAgIDwvcmVsYXRpb25zPgogICAgICAgIDwvbG9naW4+CiAgICA8L29wZXJhdGlvbj4KPC9zc28+Cg==",
                 "PIIMsGnPkWhKjgadit0SQaanMeGdqK5t8lJjAPdgsQP4veu6TNqwGg+gQ1WG5ZIlvc7BkOtpCfTPM2MZlSc53AnPis6eF9yYHxEMj3UAjCvOZBcju2HgvjmWDr63E8wwdhoifnavFCC88kgylI1Q/hkx0kGs0N2NyHDfH10kwsU=",
