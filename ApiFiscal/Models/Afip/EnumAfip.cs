@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ApiFiscal.Models.Afip
+﻿namespace ApiFiscal.Models.Afip
 {
     public static class EnumAfipPost
     {

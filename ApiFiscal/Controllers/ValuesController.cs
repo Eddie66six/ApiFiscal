@@ -44,7 +44,7 @@ namespace ApiFiscal.Controllers
 
             var alicIva = new AlicIva(5, baseImp, impIVA);//iva.Body.FEParamGetTiposIvaResponse.FEParamGetTiposIvaResult.ResultGet.IvaTipo.Select(p=> new AlicIva(p.Id,0.1, 0.0)).ToList();
 
-            var fECAEDetRequest = new FECAEDetRequest(3, EDocTipo.CUIT, 30710969619, 2, 2, 2.0, 2.0, impIVA, "PES", 1.0,
+            var fECAEDetRequest = new FECAEDetRequest(3, EDocTipo.Cuit, 30710969619, 2, 2, 2.0, 2.0, impIVA, "PES", 1.0,
                 null, null, new Iva(new List<AlicIva> { alicIva }), null);
             var objXml = new Envelope(auth, feCabReq, fECAEDetRequest);
 

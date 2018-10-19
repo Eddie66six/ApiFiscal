@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace ApiFiscal.Models
@@ -33,12 +34,12 @@ namespace ApiFiscal.Models
                                "<CbteDesde>" + objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.CbteDesde + "</CbteDesde>" +
                                "<CbteHasta>" + objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.CbteHasta + "</CbteHasta>" +
                                 "<CbteFch>" + objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.CbteFch.ToString("yyyMMdd") + "</CbteFch>" +
-                                "<ImpTotal>" + objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.ImpTotal.ToString().Replace(",", ".") + "</ImpTotal>" +
+                                "<ImpTotal>" + objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.ImpTotal.ToString(CultureInfo.InvariantCulture) + "</ImpTotal>" +
                                 "<ImpTotConc>" + objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.ImpTotConc + "</ImpTotConc>" +
-                                "<ImpNeto>" + objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.ImpNeto.ToString().Replace(",", ".") + "</ImpNeto>" +
+                                "<ImpNeto>" + objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.ImpNeto.ToString(CultureInfo.InvariantCulture) + "</ImpNeto>" +
                                 "<ImpOpEx>" + objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.ImpOpEx + "</ImpOpEx>" +
                                 "<ImpTrib>" + objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.ImpTrib + "</ImpTrib>" +
-                                "<ImpIVA>" + objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.ImpIVA.ToString().Replace(",", ".") + "</ImpIVA>" +
+                                "<ImpIVA>" + objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.ImpIVA.ToString(CultureInfo.InvariantCulture) + "</ImpIVA>" +
                                 "<FchServDesde>" + objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.FchServDesde.ToString("yyyMMdd") + "</FchServDesde>" +
                                 "<FchServHasta>" + objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.FchServHasta.ToString("yyyMMdd") + "</FchServHasta>" +
                                 "<FchVtoPago>" + objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.FchVtoPago.ToString("yyyMMdd") + "</FchVtoPago>";
@@ -60,9 +61,9 @@ namespace ApiFiscal.Models
                                     xml += "<Tributo>" +
                                                "<Id>" + t.Id + "</Id>";
                                     xml += t.Desc != null ? "<Desc>" + t.Desc + "</Desc>" : null;
-                                    xml += "<BaseImp>" + t.BaseImp.ToString().Replace(",",".") + "</BaseImp>" +
+                                    xml += "<BaseImp>" + t.BaseImp.ToString(CultureInfo.InvariantCulture) + "</BaseImp>" +
                                     "<Alic>" + t.Alic + "</Alic>" +
-                                    "<Importe>" + t.Importe.ToString().Replace(",", ".") + "</Importe>" +
+                                    "<Importe>" + t.Importe.ToString(CultureInfo.InvariantCulture) + "</Importe>" +
                                 "</Tributo>";
                                 }
                                 xml += "</Tributos>" +
@@ -71,8 +72,8 @@ namespace ApiFiscal.Models
                                 {
                                     xml += "<AlicIva>" +
                                                 "<Id>" + i.Id + "</Id>" +
-                                                "<BaseImp>" + i.BaseImp.ToString().Replace(",", ".") + "</BaseImp>" +
-                                                "<Importe>" + i.Importe.ToString().Replace(",", ".") + "</Importe>" +
+                                                "<BaseImp>" + i.BaseImp.ToString(CultureInfo.InvariantCulture) + "</BaseImp>" +
+                                                "<Importe>" + i.Importe.ToString(CultureInfo.InvariantCulture) + "</Importe>" +
                                             "</AlicIva>";
                                 }
                                 xml += "</Iva>";
@@ -319,8 +320,7 @@ namespace ApiFiscal.Models
         /// <param name="cbteHasta"></param>
         /// <param name="impTotConc">Valor líquido não tributado. Deve ser menor ou igual a quantidade total e não pode ser menor que zero. Não pode ser maior que o Valor Total da operação ou menor que zero (0). Para vouchers tipo C, deve ser igual a zero (0). Para recibos de Mercadorias Usadas - Emissor Monotributista este campo corresponde ao valor do subtotal.</param>
         /// <param name="impOpEx">Quantidade isenta. Deve ser menor ou igual a quantidade total e não pode ser menor que zero. Para vouchers tipo C, deve ser igual a zero (0). Para vouchers de Bens Usados ​​- Emitente Monotributista não deve ser informado ou deve ser igual a zero (0).</param>
-        /// <param name="impIVA">Soma das quantidades da matriz de IVA. Para vouchers tipo C, deve ser igual a zero (0). Para vouchers de Bens Usados ​​- Emitente Monotributista não deve ser informado ou deve ser igual a zero (0).</param>
-        /// <param name="impTrib">Soma dos valores da matriz de tributo</param>
+        /// <param name="impIva">Soma das quantidades da matriz de IVA. Para vouchers tipo C, deve ser igual a zero (0). Para vouchers de Bens Usados ​​- Emitente Monotributista não deve ser informado ou deve ser igual a zero (0).</param>
         /// <param name="monId">Código da moeda do vale. Verifique o método FEParamGetTiposMonedas para possíveis valores</param>
         /// <param name="monCotiz">Citação da moeda relatada. Para PES, pesos argentinos o mesmo deve ser 1</param>
         /// <param name="cbtesAsoc"></param>
@@ -331,7 +331,7 @@ namespace ApiFiscal.Models
         /// <param name="fchServDesde"> Data de início da assinatura do serviço a ser faturado. Dados obrigatórios para o conceito 2 ou 3 (Serviços / Produtos e Serviços). Formato yyyymmdd</param>
         /// <param name="fchServHasta">Data final da assinatura do serviço a ser faturado. Dados obrigatórios para o conceito 2 ou 3 (Serviços / Produtos e Serviços). Formatar yyyymmdd. FchServUp não pode ser menor que fchServDesde</param>
         /// <param name="fchVtoPago">Serviço de data de vencimento do pagamento a ser faturado. Dados obrigatórios para o conceito 2 ou 3 (Serviços / Produtos e Serviços). Formatar yyyymmdd. Deve ser o mesmo ou mais tarde que a data do voucher.</param>
-        public FECAEDetRequest(int concepto, EDocTipo docTipo, long docNro, long cbteDesde, long cbteHasta, double impTotConc, double impOpEx, double impIVA,
+        public FECAEDetRequest(int concepto, EDocTipo docTipo, long docNro, long cbteDesde, long cbteHasta, double impTotConc, double impOpEx, double impIva,
             string monId, double monCotiz, CbtesAsoc cbtesAsoc = null, Tributos tributos = null, Iva iva = null, Opcionales opcionales = null, DateTime? cbteFch = null, DateTime? fchServDesde = null, DateTime? fchServHasta = null, DateTime? fchVtoPago = null)
         {
             Concepto = concepto;
@@ -341,7 +341,7 @@ namespace ApiFiscal.Models
             CbteHasta = cbteHasta;
             ImpTotConc = impTotConc;
             ImpOpEx = impOpEx;
-            ImpIVA = impIVA;
+            ImpIVA = impIva;
             MonId = monId;
             MonCotiz = monCotiz;
             CbtesAsoc = cbtesAsoc ?? new CbtesAsoc();
@@ -456,8 +456,8 @@ namespace ApiFiscal.Models
     //enum
     public enum EDocTipo
     {
-        CUIT = 80,
-        CUIL = 86,
-        CDI = 87
+        Cuit = 80,
+        Cuil = 86,
+        Cdi = 87
     }
 }
