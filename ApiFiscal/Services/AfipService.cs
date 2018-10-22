@@ -16,9 +16,11 @@ namespace ApiFiscal.Services
     public class AfipService
     {
         private readonly HttpClient _client;
+        private readonly string _urlApi;
         public AfipService()
         {
             _client = new HttpClient();
+            _urlApi = "https://wswhomo.afip.gov.ar/wsfev1/service.asmx?op=";
         }
 
         private static byte[] FirmaBytesMensaje(byte[] argBytesMsg, X509Certificate2 argCertFirmante)
@@ -87,7 +89,7 @@ namespace ApiFiscal.Services
             try
             {
                 var httpContent = new StringContent(xml, Encoding.UTF8, "text/xml");
-                var response = _client.PostAsync("https://wswhomo.afip.gov.ar/wsfev1/service.asmx?op=FECAESolicitar", httpContent).Result;
+                var response = _client.PostAsync(_urlApi + "FECAESolicitar", httpContent).Result;
                 var retorno = response.Content.ReadAsStringAsync().Result;
                 return retorno;
             }
@@ -102,7 +104,7 @@ namespace ApiFiscal.Services
             try
             {
                 var httpContent = new StringContent(xml, Encoding.UTF8, "text/xml");
-                var response = _client.PostAsync("https://wswhomo.afip.gov.ar/wsfev1/service.asmx?op=FEParamGetTiposIva", httpContent).Result;
+                var response = _client.PostAsync(_urlApi + "FEParamGetTiposIva", httpContent).Result;
                 var result = response.Content.ReadAsStringAsync().Result;
 
                 XmlSerializer serializer = new XmlSerializer(typeof(EnvelopeFEParamGetTiposIva));
@@ -122,7 +124,7 @@ namespace ApiFiscal.Services
             try
             {
                 var httpContent = new StringContent(xml, Encoding.UTF8, "text/xml");
-                var response = _client.PostAsync("https://wswhomo.afip.gov.ar/wsfev1/service.asmx?op=FEParamGetTiposMonedas", httpContent).Result;
+                var response = _client.PostAsync(_urlApi + "FEParamGetTiposMonedas", httpContent).Result;
                 var result = response.Content.ReadAsStringAsync().Result;
 
                 var serializer = new XmlSerializer(typeof(EnvelopeFEParamGetTiposMonedas));
@@ -141,7 +143,7 @@ namespace ApiFiscal.Services
             try
             {
                 var httpContent = new StringContent(xml, Encoding.UTF8, "text/xml");
-                var response = _client.PostAsync("https://wswhomo.afip.gov.ar/wsfev1/service.asmx?op=FEParamGetTiposCbte", httpContent).Result;
+                var response = _client.PostAsync(_urlApi + "FEParamGetTiposCbte", httpContent).Result;
                 var result = response.Content.ReadAsStringAsync().Result;
 
                 var serializer = new XmlSerializer(typeof(EnvelopeFEParamGetTiposCbte));
@@ -159,7 +161,7 @@ namespace ApiFiscal.Services
             try
             {
                 var httpContent = new StringContent(xml, Encoding.UTF8, "text/xml");
-                var response = _client.PostAsync("https://wswhomo.afip.gov.ar/wsfev1/service.asmx?op=FEParamGetTiposDoc", httpContent).Result;
+                var response = _client.PostAsync(_urlApi + "FEParamGetTiposDoc", httpContent).Result;
                 var result = response.Content.ReadAsStringAsync().Result;
 
                 var serializer = new XmlSerializer(typeof(EnvelopeFEParamGetTiposDoc));
@@ -178,7 +180,7 @@ namespace ApiFiscal.Services
             try
             {
                 var httpContent = new StringContent(xml, Encoding.UTF8, "text/xml");
-                var response = _client.PostAsync("https://wswhomo.afip.gov.ar/wsfev1/service.asmx?op=FEParamGetTiposTributos", httpContent).Result;
+                var response = _client.PostAsync(_urlApi + "=FEParamGetTiposTributos", httpContent).Result;
                 var result = response.Content.ReadAsStringAsync().Result;
 
                 var serializer = new XmlSerializer(typeof(EnvelopeFEParamGetTiposTributos));

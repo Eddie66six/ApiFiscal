@@ -55,7 +55,7 @@ namespace ApiFiscal.Models
                                             "</CbteAsoc>";
                                 }
                                 xml += objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.CbtesAsoc.CbteAsoc.Count > 0 ? "</CbtesAsoc>" : "";
-                                xml += "<Tributos>";
+                                xml += objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.Tributos.Tributo.Count > 0 ? "<Tributos>" : "";
                                 foreach (var t in objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.Tributos.Tributo)
                                 {
                                     xml += "<Tributo>" +
@@ -66,8 +66,8 @@ namespace ApiFiscal.Models
                                     "<Importe>" + t.Importe.ToString(CultureInfo.InvariantCulture) + "</Importe>" +
                                 "</Tributo>";
                                 }
-                                xml += "</Tributos>" +
-                                 "<Iva>";
+                                xml += objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.Tributos.Tributo.Count > 0 ? "</Tributos>" : "";
+                                xml += "<Iva>";
                                 foreach (var i in objXml.Body.FECAESolicitar.FeCAEReq.FeDetReq.FECAEDetRequest.Iva.AlicIva)
                                 {
                                     xml += "<AlicIva>" +
@@ -249,13 +249,22 @@ namespace ApiFiscal.Models
         /// meno ou igual a 0,01% ou erro absoluto menor ou igual a 0,01 Não aplicável para recibos tipo C
         /// </summary>
         /// <param name="id">Código de tipo de iva. Consultar método FEParamGetTiposIva</param>
-        /// <param name="baseImp">Base tributária para a determinação da alíquota.</param>
-        /// <param name="importe">Importaçao</param>
-        public AlicIva(int id, double baseImp, double importe)
+        /// <param name="amount">Total de produtos</param>
+        /// <param name="iva">porcentagem do iva</param>
+        /// <param name="included">Se o valor total ja esta incluso a porcentagem do iva</param>
+        public AlicIva(int id, double amount, double iva, bool included = true)
         {
             Id = id;
-            BaseImp = new []{2, 3, 7, 8, 52, 53}.Contains(id) ? 0.0 : baseImp;
-            Importe = new[] { 2, 3, 7, 8, 52, 53 }.Contains(id) ? 0.0 : importe;
+            if (included)
+            {
+                BaseImp = new[] { 2, 3, 7, 8, 52, 53 }.Contains(id) ? 0.0 : Math.Round(amount / ((iva / 100) + 1), 2);
+                Importe = new[] { 2, 3, 7, 8, 52, 53 }.Contains(id) ? 0.0 : Math.Round(amount - BaseImp, 2);
+            }
+            else
+            {
+                BaseImp = new[] { 2, 3, 7, 8, 52, 53 }.Contains(id) ? 0.0 : Math.Round((amount * iva) / 100, 2);
+                Importe = new[] { 2, 3, 7, 8, 52, 53 }.Contains(id) ? 0.0 : Math.Round(amount + BaseImp ,2 );
+            }
         }
         public int Id { get; set; }
         public double BaseImp { get; set; }
