@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ApiFiscal.Core.Entity.Afip;
 using ApiFiscal.Models;
 using ApiFiscal.Models.Afip;
 using ApiFiscal.Services;
 using Microsoft.AspNetCore.Mvc;
+using Auth = ApiFiscal.Models.Auth;
 
 namespace ApiFiscal.Controllers
 {
@@ -16,6 +18,7 @@ namespace ApiFiscal.Controllers
         [HttpGet]
         public ActionResult<string> Get()
         {
+
             return null;
             //recebe
             //blob .pfx

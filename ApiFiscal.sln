@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2041
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiFiscal", "ApiFiscal\ApiFiscal.csproj", "{B7753C45-6F01-4D40-9466-E7838EEF30CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiFiscal", "ApiFiscal\ApiFiscal.csproj", "{B7753C45-6F01-4D40-9466-E7838EEF30CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiFiscal.Core", "ApiFiscal.Core\ApiFiscal.Core.csproj", "{A5A7575A-8054-46A2-8993-A5D1C094F446}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{B7753C45-6F01-4D40-9466-E7838EEF30CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7753C45-6F01-4D40-9466-E7838EEF30CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7753C45-6F01-4D40-9466-E7838EEF30CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5A7575A-8054-46A2-8993-A5D1C094F446}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5A7575A-8054-46A2-8993-A5D1C094F446}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5A7575A-8054-46A2-8993-A5D1C094F446}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5A7575A-8054-46A2-8993-A5D1C094F446}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
