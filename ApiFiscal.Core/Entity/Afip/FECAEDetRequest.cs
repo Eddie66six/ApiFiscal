@@ -5,7 +5,7 @@ using ApiFiscal.Core.Enum.Afip;
 
 namespace ApiFiscal.Core.Entity.Afip
 {
-    public class FecaeDetRequest
+    public sealed class FecaeDetRequest
     {
         /// <summary>
         /// 
