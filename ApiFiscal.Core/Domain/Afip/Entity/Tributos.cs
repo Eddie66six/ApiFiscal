@@ -1,4 +1,4 @@
-﻿namespace ApiFiscal.Core.Entity.Afip
+﻿namespace ApiFiscal.Core.Domain.Afip.Entity
 {
     public sealed class Tributo
     {

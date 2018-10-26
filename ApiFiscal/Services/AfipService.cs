@@ -47,7 +47,7 @@ namespace ApiFiscal.Services
             }
         }
 
-        public loginTicketResponse LoginAsync(string caminhoArquivoPfx, string senha)
+        public loginTicketResponse LoginAsync(string caminhoArquivoPfx, string senha, ref string error)
         {
             var senhaTmp = new NetworkCredential("", senha).SecurePassword;
             var servico = "wsfe";
@@ -76,12 +76,19 @@ namespace ApiFiscal.Services
             var cmsFirmadoBase64 = Convert.ToBase64String(encodedSignedCms);
 
             var servicioWsaa = new LoginCMSClient();
-            var result = servicioWsaa.loginCmsAsync(cmsFirmadoBase64).Result;
-
-            var serializer = new XmlSerializer(typeof(loginTicketResponse));
-            var rdr = new StringReader(result.loginCmsReturn);
-            var retorno = (loginTicketResponse)serializer.Deserialize(rdr);
-            return retorno;
+            try
+            {
+                var result = servicioWsaa.loginCmsAsync(cmsFirmadoBase64).Result;
+                var serializer = new XmlSerializer(typeof(loginTicketResponse));
+                var rdr = new StringReader(result.loginCmsReturn);
+                var retorno = (loginTicketResponse)serializer.Deserialize(rdr);
+                return retorno;
+            }
+            catch (Exception e)
+            {
+                error = e.Message;
+                return null;
+            }
         }
 
         public string EmitirNotaAsync(string xml)

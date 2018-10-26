@@ -1,6 +1,6 @@
-﻿namespace ApiFiscal.Core.Entity.Afip
+﻿namespace ApiFiscal.Core.Domain.Afip.Entity
 {
-    public sealed class Auth
+    public sealed class Auth : BaseEntity
     {
         /// <summary>
         /// 
@@ -9,41 +9,41 @@
         /// <param name="sign">Sinal retornado pela WSAA</param>
         /// <param name="cuit">Contribuinte Cuit (representado ou Emitente)</param>
         /// <param name="type">Tipo da requisicao</param>
-        public static Auth Get(string token, string sign, long cuit, string type)
-        {
-            if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(sign) || string.IsNullOrEmpty(type))
-                return null;
-            return new Auth(token, sign, cuit, type);
-        }
-
-        private Auth(string token, string sign, long cuit, string type)
+        public Auth(string token, string sign, long cuit)
         {
             Token = token;
             Sign = sign;
             Cuit = cuit;
-            Type = type;
         }
         public string Token { get; set; }
         public string Sign { get; set; }
         public long Cuit { get; set; }
-        public string Type { get; set; }
+
+        protected override void Validate()
+        {
+            base.Validate();
+            if (string.IsNullOrEmpty(Token) || string.IsNullOrEmpty(Sign))
+            {
+                IsValid = false;
+            }
+        }
 
         /// <summary>
         /// Retorna o xml de acordo com o Type para requisicoes
         /// </summary>
         /// <returns></returns>
-        public string GetXmlAuth()
+        public string GetXmlAuth(string type)
         {
             var xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
                       "<soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">" +
                           "<soap:Body>" +
-                              "<" + Type + " xmlns=\"http://ar.gov.afip.dif.FEV1/\">" +
+                              "<" + type + " xmlns=\"http://ar.gov.afip.dif.FEV1/\">" +
                                   "<Auth>" +
                                       "<Token>" + Token + "</Token>" +
                                       "<Sign>" + Sign + "</Sign>" +
                                       "<Cuit>" + Cuit + "</Cuit>" +
                                   "</Auth>" +
-                              "</" + Type + ">" +
+                              "</" + type + ">" +
                           "</soap:Body>" +
                       "</soap:Envelope>";
             return xml;

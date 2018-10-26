@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace ApiFiscal.Core.Entity.Afip
+namespace ApiFiscal.Core.Domain.Afip.Entity
 {
     public sealed class EmitirNota
     {

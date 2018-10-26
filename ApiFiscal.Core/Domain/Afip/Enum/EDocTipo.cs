@@ -1,4 +1,4 @@
-﻿namespace ApiFiscal.Core.Enum.Afip
+﻿namespace ApiFiscal.Core.Domain.Afip.Enum
 {
     public enum EDocTipo
     {

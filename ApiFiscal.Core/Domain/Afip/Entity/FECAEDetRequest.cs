@@ -1,9 +1,9 @@
-﻿using System;
+﻿using ApiFiscal.Core.Domain.Afip.Enum;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using ApiFiscal.Core.Enum.Afip;
 
-namespace ApiFiscal.Core.Entity.Afip
+namespace ApiFiscal.Core.Domain.Afip.Entity
 {
     public sealed class FecaeDetRequest
     {
