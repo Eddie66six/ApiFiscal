@@ -78,7 +78,7 @@ namespace ApiFiscal.Services
             var servicioWsaa = new LoginCMSClient();
             try
             {
-                var result = servicioWsaa.loginCmsAsync(cmsFirmadoBase64).Result;
+                loginCmsResponse result = servicioWsaa.loginCmsAsync(cmsFirmadoBase64).Result;
                 var serializer = new XmlSerializer(typeof(loginTicketResponse));
                 var rdr = new StringReader(result.loginCmsReturn);
                 var retorno = (loginTicketResponse)serializer.Deserialize(rdr);

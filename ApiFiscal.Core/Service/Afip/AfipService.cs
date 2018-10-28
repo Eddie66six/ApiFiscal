@@ -1,5 +1,4 @@
-﻿using ApiFiscal.Core.Domain.Afip.Entity.Returns;
-using System;
+﻿using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -8,6 +7,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using ApiFiscal.Core.Domain.Afip.Entity.Returns;
 using wsaahomo;
 
 namespace ApiFiscal.Core.Service.Afip
@@ -77,7 +77,7 @@ namespace ApiFiscal.Core.Service.Afip
             var servicioWsaa = new LoginCMSClient();
             try
             {
-                var result = servicioWsaa.loginCmsAsync(cmsFirmadoBase64).Result;
+                loginCmsResponse result = servicioWsaa.loginCmsAsync(cmsFirmadoBase64).Result;
                 var serializer = new XmlSerializer(typeof(LoginAfipReturn));
                 var rdr = new StringReader(result.loginCmsReturn);
                 var retorno = (LoginAfipReturn)serializer.Deserialize(rdr);
@@ -90,17 +90,40 @@ namespace ApiFiscal.Core.Service.Afip
             }
         }
 
-        public string EmitirNotaAsync(string xml)
+        public FECAESolicitar EmitirNotaAsync(string xml, ref string error)
         {
             try
             {
                 var httpContent = new StringContent(xml, Encoding.UTF8, "text/xml");
                 var response = _client.PostAsync(_urlApi + "FECAESolicitar", httpContent).Result;
-                var retorno = response.Content.ReadAsStringAsync().Result;
+                var result = response.Content.ReadAsStringAsync().Result;
+                var serializer = new XmlSerializer(typeof(FECAESolicitar));
+                var rdr = new StringReader(result);
+                var retorno = (FECAESolicitar)serializer.Deserialize(rdr);
                 return retorno;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                error = e.Message;
+                return null;
+            }
+        }
+
+        public FECompUltimoAutorizado UltimoNumeroAutorizado(string xml, ref string error)
+        {
+            try
+            {
+                var httpContent = new StringContent(xml, Encoding.UTF8, "text/xml");
+                var response = _client.PostAsync(_urlApi + "FECAESolicitar", httpContent).Result;
+                var result = response.Content.ReadAsStringAsync().Result;
+                var serializer = new XmlSerializer(typeof(FECompUltimoAutorizado));
+                var rdr = new StringReader(result);
+                var retorno = (FECompUltimoAutorizado)serializer.Deserialize(rdr);
+                return retorno;
+            }
+            catch (Exception e)
+            {
+                error = e.Message;
                 return null;
             }
         }

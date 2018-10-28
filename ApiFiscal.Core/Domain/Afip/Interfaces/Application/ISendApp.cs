@@ -1,9 +1,9 @@
-﻿using ApiFiscal.Core.Application.Afip.ModelreceiveParameters;
+﻿using ApiFiscal.Core.Application.Afip.Model;
 
 namespace ApiFiscal.Core.Domain.Afip.Interfaces.Application
 {
     public interface ISendApp
     {
-        string Send(SendModel sendModel);
+        dynamic Send(SendModel sendModel);
     }
 }

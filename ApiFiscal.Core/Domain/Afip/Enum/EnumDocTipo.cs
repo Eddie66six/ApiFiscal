@@ -1,6 +1,6 @@
 ﻿namespace ApiFiscal.Core.Domain.Afip.Enum
 {
-    public enum EDocTipo
+    public enum EnumDocTipo
     {
         Cuit = 80,
         Cuil = 86,

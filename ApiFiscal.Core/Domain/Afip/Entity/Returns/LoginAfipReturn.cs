@@ -1,42 +1,40 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System.Xml.Serialization;
 
 namespace ApiFiscal.Core.Domain.Afip.Entity.Returns
 {
-    public sealed class Header
+    [XmlRoot(ElementName = "header")]
+    public class Header
     {
-        [JsonConstructor]
-        private Header()
-        {
-
-        }
-        public string source { get; set; }
-        public string destination { get; set; }
-        public long uniqueId { get; set; }
-        public DateTime generationTime { get; set; }
-        public DateTime expirationTime { get; set; }
+        [XmlElement(ElementName = "source")]
+        public string Source { get; set; }
+        [XmlElement(ElementName = "destination")]
+        public string Destination { get; set; }
+        [XmlElement(ElementName = "uniqueId")]
+        public string UniqueId { get; set; }
+        [XmlElement(ElementName = "generationTime")]
+        public string GenerationTime { get; set; }
+        [XmlElement(ElementName = "expirationTime")]
+        public string ExpirationTime { get; set; }
     }
 
-    public sealed class Credentials
+    [XmlRoot(ElementName = "credentials")]
+    public class Credentials
     {
-        [JsonConstructor]
-        public Credentials()
-        {
-
-        }
-        public string token { get; set; }
-        public string sign { get; set; }
+        [XmlElement(ElementName = "token")]
+        public string Token { get; set; }
+        [XmlElement(ElementName = "sign")]
+        public string Sign { get; set; }
     }
 
-    public sealed class LoginAfipReturn
+    [XmlRoot(ElementName = "loginTicketResponse")]
+    public class LoginAfipReturn
     {
-        [JsonConstructor]
-        public LoginAfipReturn()
-        {
-
-        }
-        public Header header { get; set; }
-        public Credentials credentials { get; set; }
+        [XmlElement(ElementName = "header")]
+        public Header Header { get; set; }
+        [XmlElement(ElementName = "credentials")]
+        public Credentials Credentials { get; set; }
+        [XmlAttribute(AttributeName = "version")]
         public string Version { get; set; }
     }
+
 }

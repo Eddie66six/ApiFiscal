@@ -1,10 +1,11 @@
-﻿using ApiFiscal.Core.Domain.Afip.Entity;
-using ApiFiscal.Core.Domain.Afip.Enum;
+﻿using ApiFiscal.Core.Domain.Afip.Enum;
 
-namespace ApiFiscal.Core.Application.Afip.ModelreceiveParameters
+namespace ApiFiscal.Core.Application.Afip.Model
 {
-    public class SendModel
+    public sealed class SendModel
     {
+        public string PathPfx { get; set; }
+        public string Password { get; set; }
         public string Token { get; set; }
         public string Sign { get; set; }
         public long Cuit { get; set; }
@@ -12,7 +13,7 @@ namespace ApiFiscal.Core.Application.Afip.ModelreceiveParameters
         public double Amount { get; set; }
         public double Iva { get; set; }
         public int Concepto { get; set; }
-        public EDocTipo DocTipo { get; set; }
+        public EnumDocTipo DocTipo { get; set; }
         public long DocNro { get; set; }
         public int CantReg { get; set; }
         public int PtoVta { get; set; }

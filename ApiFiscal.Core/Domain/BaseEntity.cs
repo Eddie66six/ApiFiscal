@@ -1,8 +1,7 @@
 ﻿namespace ApiFiscal.Core.Domain
 {
-    public abstract class BaseEntity
+    public abstract class BaseEntity : ErrorEvents
     {
-        public bool IsValid { get; set; } = true;
-        protected virtual void Validate() { }
+        protected bool IsValid { get; set; } = true;
     }
 }
