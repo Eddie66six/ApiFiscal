@@ -21,7 +21,8 @@ namespace ApiFiscal.Core.Application.Afip
 
             return login;
         }
-        public dynamic Send(SendModel sendModel)
+        //metodo interno separado para poder refazer o login caso o token esteja expirado
+        private dynamic InternalSend(SendModel sendModel)
         {
             if (sendModel == null)
             {
@@ -43,15 +44,14 @@ namespace ApiFiscal.Core.Application.Afip
             string strError = null;
             //obtem o ultimo numero enviado
             var xmlUltimoNumero = afipApi.UltimoNumeroAutorizado(auth.GetXmlAuthLastAuthorizedNumber(sendModel.PtoVta, sendModel.CbteTipo), ref strError);
-            //verifica erro no requeste do ultimo numero enviado
-            if (strError != null)
-            {
-                RaiseError(strError);
-                return null;
-            }
+
             //verifica erro no ultimo numero enviado
-            if (xmlUltimoNumero.Body.FECompUltimoAutorizadoResponse.FECompUltimoAutorizadoResult.Errors != null)
+            if (xmlUltimoNumero?.Body.FECompUltimoAutorizadoResponse.FECompUltimoAutorizadoResult.Errors != null)
             {
+                if (xmlUltimoNumero.Body.FECompUltimoAutorizadoResponse.FECompUltimoAutorizadoResult.Errors.Err.FirstOrDefault(p => p.Code == "600") != null)
+                {
+                    return "reload";
+                }
                 return new
                 {
                     Credencial = new { auth.Token, auth.Sign },
@@ -59,6 +59,14 @@ namespace ApiFiscal.Core.Application.Afip
                     Error = xmlUltimoNumero.Body.FECompUltimoAutorizadoResponse.FECompUltimoAutorizadoResult.Errors.Err.Select(p => new ErrorModel(p.Msg, p.Code))
                 };
             }
+
+            //verifica erro no requeste do ultimo numero enviado
+            if (strError != null)
+            {
+                RaiseError(strError);
+                return null;
+            }
+
             //obterm o proximo numero
             var proximoNumero = xmlUltimoNumero.Body.FECompUltimoAutorizadoResponse.FECompUltimoAutorizadoResult.CbteNro + 1;
 
@@ -71,13 +79,27 @@ namespace ApiFiscal.Core.Application.Afip
             //obtem o xml da nota
             var emiti = EmitirNota.Get(auth, feCabReq, fEcaeDetRequest);
             //envia nota
-            var xml = afipApi.EmitirNotaAsync(emiti.GetXmlString(),ref strError);
+            var xml = afipApi.EmitirNotaAsync(emiti.GetXmlString(), ref strError);
+
             return new
             {
                 Credencial = new { auth.Token, auth.Sign },
-                Response = xml?.Body.FECAESolicitarResponse.FECAESolicitarResult.FeDetResp?.FECAEDetResponse.Select(p=> new { p.CAE, p.CAEFchVto, Fecha = xml.Body.FECAESolicitarResponse.FECAESolicitarResult.FeCabResp.FchProceso }),
-                Error = xml == null ? new[] { new ErrorModel(strError, "0") } : xml.Body.FECAESolicitarResponse.FECAESolicitarResult.Errors?.Err.Select(p=> new ErrorModel(p.Msg, p.Code) )
+                Response = xml?.Body.FECAESolicitarResponse.FECAESolicitarResult.FeDetResp?.FECAEDetResponse.Select(p => new { p.CAE, p.CAEFchVto, Fecha = xml.Body.FECAESolicitarResponse.FECAESolicitarResult.FeCabResp.FchProceso }),
+                Error = xml == null ? new[] { new ErrorModel(strError, "0") } : xml.Body.FECAESolicitarResponse.FECAESolicitarResult.Errors?.Err.Select(p => new ErrorModel(p.Msg, p.Code))
             };
+        }
+
+        public dynamic Send(SendModel sendModel)
+        {
+            var result = InternalSend(sendModel);
+            if (result == "reload")
+            {
+                sendModel.Token = null;
+                sendModel.Sign = null;
+                result = InternalSend(sendModel);
+            }
+
+            return result;
         }
     }
 }

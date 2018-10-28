@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace ApiFiscal.Core
 {
-    public class ErrorEvents : IErrorEvents
+    public class ErrorEvents : IErrorEvents, IDisposable
     {
         private static List<ErrorModel> _handlers;
 
@@ -22,6 +22,12 @@ namespace ApiFiscal.Core
         public List<ErrorModel> GetMessages()
         {
             return _handlers;
+        }
+
+        public void Dispose()
+        {
+            _handlers = null;
+            GC.SuppressFinalize(this);
         }
     }
 
