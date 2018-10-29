@@ -7,7 +7,8 @@
         /// </summary>
         /// <param name="cantReg">Quantidade de registros dos detalhes do voucher ou lote de vouchers</param>
         /// <param name="ptoVta">Ponto de Venda do voucher que está sendo reportado. Se mais de um recibo for informado, todos devem corresponder ao mesmo ponto de venda. Obs: è oq esta na tabela PONTOS_DE_VENDA</param>
-        /// <param name="cbteTipo">Tipo de voucher que está sendo relatado. Se mais de um recibo for informado, todos devem ser do mesmo tipo. OBS: Com Factura A só pode ser usado o documento CUIT(CNPJ), campo RG no EVO. Com factura B somente DNI(CPF)</param>
+        /// <param name="cbteTipo">Tipo de voucher que está sendo relatado. Se mais de um recibo for informado, todos devem ser do mesmo tipo.
+        /// OBS: 1,3,6,8 - Factura A, Nota de Crédito A, Factura B, Nota de Crédito B -> Com Factura A só pode ser usado o documento CUIT(CNPJ), campo RG no EVO. Com factura B somente DNI(CPF)</param>
         public FeCabReq(int cantReg, int ptoVta, int cbteTipo)
         {
             CantReg = cantReg;

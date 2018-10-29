@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ApiFiscal.Models;
-using ApiFiscal.Models.Afip;
+﻿using ApiFiscal.Models;
 using ApiFiscal.Services;
 using Microsoft.AspNetCore.Mvc;
-using Auth = ApiFiscal.Models.Auth;
 
 namespace ApiFiscal.Controllers
 {
@@ -17,7 +12,6 @@ namespace ApiFiscal.Controllers
         [HttpGet]
         public ActionResult<string> Get()
         {
-
             return null;
             //recebe
             //blob .pfx
@@ -40,14 +34,15 @@ namespace ApiFiscal.Controllers
 
             //var cuit = 27129666612;
             //var afipApi = new AfipService();
-            ////var login = afipApi.LoginAsync("..\\teste\\certificado.pfx", "w12");
+            //string error = null;
+            //var login = afipApi.LoginAsync("..\\teste\\certificado.pfx", "w12", ref error);
 
             //var auth = new Auth("PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/Pgo8c3NvIHZlcnNpb249IjIuMCI+CiAgICA8aWQgc3JjPSJDTj13c2FhaG9tbywgTz1BRklQLCBDPUFSLCBTRVJJQUxOVU1CRVI9Q1VJVCAzMzY5MzQ1MDIzOSIgZHN0PSJDTj13c2ZlLCBPPUFGSVAsIEM9QVIiIHVuaXF1ZV9pZD0iMTAwNzM0ODgxMCIgZ2VuX3RpbWU9IjE1NDAyMjc0NjMiIGV4cF90aW1lPSIxNTQwMjcwNzIzIi8+CiAgICA8b3BlcmF0aW9uIHR5cGU9ImxvZ2luIiB2YWx1ZT0iZ3JhbnRlZCI+CiAgICAgICAgPGxvZ2luIGVudGl0eT0iMzM2OTM0NTAyMzkiIHNlcnZpY2U9IndzZmUiIHVpZD0iU0VSSUFMTlVNQkVSPUNVSVQgMjcxMjk2NjY2MTIsIENOPWd0ZXN0ZSIgYXV0aG1ldGhvZD0iY21zIiByZWdtZXRob2Q9IjIyIj4KICAgICAgICAgICAgPHJlbGF0aW9ucz4KICAgICAgICAgICAgICAgIDxyZWxhdGlvbiBrZXk9IjI3MTI5NjY2NjEyIiByZWx0eXBlPSI0Ii8+CiAgICAgICAgICAgIDwvcmVsYXRpb25zPgogICAgICAgIDwvbG9naW4+CiAgICA8L29wZXJhdGlvbj4KPC9zc28+Cg==",
             //    "VaMwR8K16MSUOZZeirXusddd92mUcuBopfLrHhvuwP0r9Qa5GvkKLoJBmN6unMOlYUzD02C6MLXHST8h6LGEIxDw1nCNZ8py6kNEfLc/6tAJglZvpX2MfzkhHo09tYhDDWVBciYjgLiSlxrcamsaZhdDwrmrzJQ+RzNdn2ufX3I=",
             //    cuit);
             //var iva = afipApi.ObterTipoIva(AfipCriarNotaFistal.GetXmlAuth(auth.Token, auth.Sign, cuit, EnumAfipPost.Ivas));
             //var moeda = afipApi.ObterTiposMonedas(AfipCriarNotaFistal.GetXmlAuth(auth.Token, auth.Sign, cuit, EnumAfipPost.Moedas));
-            //var cbte = afipApi.ObterTiposCbte(AfipCriarNotaFistal.GetXmlAuth(auth.Token, auth.Sign, cuit, EnumAfipPost.Cbte));//So usamos 1,3,6,8 - Factura A, Nota de Crédito A, Factura B, Nota de Crédito B
+            //var cbte = afipApi.ObterTiposCbte(AfipCriarNotaFistal.GetXmlAuth(auth.Token, auth.Sign, cuit, Models.Afip.EnumAfipPost.Cbte));//So usamos 1,3,6,8 - Factura A, Nota de Crédito A, Factura B, Nota de Crédito B
             //var tiposDoc = afipApi.ObterTiposDoc(AfipCriarNotaFistal.GetXmlAuth(auth.Token, auth.Sign, cuit, EnumAfipPost.TiposDoc));
             //var tiposTributos = afipApi.ObterTiposTributos(AfipCriarNotaFistal.GetXmlAuth(auth.Token, auth.Sign, cuit, EnumAfipPost.TiposTributos));
 
