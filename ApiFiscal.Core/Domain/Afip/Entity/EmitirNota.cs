@@ -2,18 +2,21 @@
 
 namespace ApiFiscal.Core.Domain.Afip.Entity
 {
-    public sealed class EmitirNota
+    public sealed class EmitirNota: BaseEntity
     {
-        public static EmitirNota Get(Auth auth, FeCabReq feCabReq, FecaeDetRequest fecaeDetRequest)
-        {
-            return new EmitirNota(auth, feCabReq, fecaeDetRequest);
-        }
-
-        private EmitirNota(Auth auth, FeCabReq feCabReq, FecaeDetRequest fecaeDetRequest)
+        public EmitirNota(Auth auth, FeCabReq feCabReq, FecaeDetRequest fecaeDetRequest)
         {
             Auth = auth;
             FeCabReq = feCabReq;
             FecaeDetRequest = fecaeDetRequest;
+        }
+
+        protected override void ValidateOnCreate()
+        {
+            if(Auth?.IsValid != true || FeCabReq?.IsValid != true || FecaeDetRequest?.IsValid != true)
+            {
+                IsValid = false;
+            }
         }
 
         public Auth Auth { get; set; }

@@ -2,6 +2,8 @@
 {
     public abstract class BaseEntity : ErrorEvents
     {
-        protected bool IsValid { get; set; } = true;
+        public bool IsValid { get; protected set; } = true;
+
+        protected abstract void ValidateOnCreate();
     }
 }

@@ -22,7 +22,7 @@ namespace ApiFiscal.Core.Application.Afip
             return login;
         }
         //metodo interno separado para poder refazer o login caso o token esteja expirado
-        private dynamic InternalSend(SendModel sendModel)
+        private dynamic InternalSend(SendModel sendModel, ref bool reload)
         {
             if (sendModel == null)
             {
@@ -30,8 +30,8 @@ namespace ApiFiscal.Core.Application.Afip
                 return null;
             }
             //prepara o obj de login e faz validaçao basica
-            var auth = Auth.Create(sendModel.Token, sendModel.Sign, sendModel.Cuit, sendModel.PathPfx, sendModel.Password);
-            if (auth == null) return null;
+            var auth = new Auth(sendModel.Token, sendModel.Sign, sendModel.Cuit, sendModel.PathPfx, sendModel.Password);
+            if (!auth.IsValid) return null;
 
             var afipApi = new AfipService();
             if (!auth.IsLogged())
@@ -39,6 +39,8 @@ namespace ApiFiscal.Core.Application.Afip
                 var login = Login(auth, afipApi);
                 if (login == null) return null;
                 auth.UpdateCredencial(login.Credentials.Token, login.Credentials.Sign);
+                if (!auth.IsValid)
+                    return null;
             }
 
             string strError = null;
@@ -48,9 +50,11 @@ namespace ApiFiscal.Core.Application.Afip
             //verifica erro no ultimo numero enviado
             if (xmlUltimoNumero?.Body.FECompUltimoAutorizadoResponse.FECompUltimoAutorizadoResult.Errors != null)
             {
+                //login invalido -> retona para tentar relogar
                 if (xmlUltimoNumero.Body.FECompUltimoAutorizadoResponse.FECompUltimoAutorizadoResult.Errors.Err.FirstOrDefault(p => p.Code == "600") != null)
                 {
-                    return "reload";
+                    reload = true;
+                    return null;
                 }
                 return new
                 {
@@ -71,15 +75,15 @@ namespace ApiFiscal.Core.Application.Afip
             var proximoNumero = xmlUltimoNumero.Body.FECompUltimoAutorizadoResponse.FECompUltimoAutorizadoResult.CbteNro + 1;
 
             //prepara objetos para nota
-            var feCabReq = FeCabReq.Get(sendModel.CantReg, sendModel.PtoVta, sendModel.CbteTipo);
-            var alicIva = AlicIva.Get(sendModel.IdIva, sendModel.Amount, sendModel.Iva);
+            var feCabReq = new FeCabReq(sendModel.CantReg, sendModel.PtoVta, sendModel.CbteTipo);
+            var alicIva = new AlicIva(sendModel.IdIva, sendModel.Amount, sendModel.Iva);
 
-            var fEcaeDetRequest = FecaeDetRequest.Get(sendModel.Concepto, sendModel.DocTipo, sendModel.DocNro, proximoNumero, proximoNumero, 2.0, 2.0, alicIva.Importe,
+            var fEcaeDetRequest = new FecaeDetRequest(sendModel.Concepto, sendModel.DocTipo, sendModel.DocNro, proximoNumero, proximoNumero, 2.0, 2.0, alicIva.Importe,
                 "PES", 1.0, null, null, new System.Collections.Generic.List<AlicIva>() { alicIva }, null);
             //obtem o xml da nota
-            var emiti = EmitirNota.Get(auth, feCabReq, fEcaeDetRequest);
-            //envia nota
-            var xml = afipApi.EmitirNotaAsync(emiti.GetXmlString(), ref strError);
+            var emitir = new EmitirNota(auth, feCabReq, fEcaeDetRequest);
+            //envia nota caso nao tenha nenhum erro
+            var xml = emitir.IsValid ? afipApi.EmitirNotaAsync(emitir.GetXmlString(), ref strError) : null;
 
             return new
             {
@@ -91,12 +95,13 @@ namespace ApiFiscal.Core.Application.Afip
 
         public dynamic Send(SendModel sendModel)
         {
-            var result = InternalSend(sendModel);
-            if (result == "reload")
+            var reload = false;
+            var result = InternalSend(sendModel, ref reload);
+            if (reload)
             {
                 sendModel.Token = null;
                 sendModel.Sign = null;
-                result = InternalSend(sendModel);
+                result = InternalSend(sendModel, ref reload);
             }
 
             return result;

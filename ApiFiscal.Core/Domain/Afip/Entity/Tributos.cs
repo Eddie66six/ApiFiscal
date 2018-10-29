@@ -1,6 +1,6 @@
 ﻿namespace ApiFiscal.Core.Domain.Afip.Entity
 {
-    public sealed class Tributo
+    public sealed class Tributo : BaseEntity
     {
         /// <summary>
         /// 
@@ -10,11 +10,6 @@
         /// <param name="alic">Alíquota</param>
         /// <param name="importe">Tributaçao de importações</param>
         /// <param name="desc">Descrição do tributo.</param>
-        public static Tributo Get(short id, double baseImp, double alic, double importe, string desc = null)
-        {
-            return new Tributo(id, baseImp, alic, importe, desc);
-        }
-
         private Tributo(short id, double baseImp, double alic, double importe, string desc = null)
         {
             Id = id;
@@ -22,7 +17,14 @@
             Alic = alic;
             Importe = importe;
             Desc = desc;
+            ValidateOnCreate();
         }
+
+        protected override void ValidateOnCreate()
+        {
+            
+        }
+
         public short Id { get; set; }
         public string Desc { get; set; }
         public double BaseImp { get; set; }

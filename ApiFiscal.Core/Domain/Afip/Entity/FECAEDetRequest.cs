@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace ApiFiscal.Core.Domain.Afip.Entity
 {
-    public sealed class FecaeDetRequest
+    public sealed class FecaeDetRequest : BaseEntity
     {
         /// <summary>
         /// 
@@ -28,15 +28,7 @@ namespace ApiFiscal.Core.Domain.Afip.Entity
         /// <param name="fchServDesde"> Data de início da assinatura do serviço a ser faturado. Dados obrigatórios para o conceito 2 ou 3 (Serviços / Produtos e Serviços). Formato yyyymmdd</param>
         /// <param name="fchServHasta">Data final da assinatura do serviço a ser faturado. Dados obrigatórios para o conceito 2 ou 3 (Serviços / Produtos e Serviços). Formatar yyyymmdd. FchServUp não pode ser menor que fchServDesde</param>
         /// <param name="fchVtoPago">Serviço de data de vencimento do pagamento a ser faturado. Dados obrigatórios para o conceito 2 ou 3 (Serviços / Produtos e Serviços). Formatar yyyymmdd. Deve ser o mesmo ou mais tarde que a data do voucher.</param>
-        public static FecaeDetRequest Get(int concepto, EnumDocTipo docTipo, long docNro, long cbteDesde, long cbteHasta, double impTotConc, double impOpEx, double impIva,
-            string monId, double monCotiz, List<CbteAsoc> cbtesAsoc = null, List<Tributo> tributos = null, List<AlicIva> ivas = null, List<Opcional> opcionales = null,
-            DateTime? cbteFch = null, DateTime? fchServDesde = null, DateTime? fchServHasta = null, DateTime? fchVtoPago = null)
-        {
-            return new FecaeDetRequest(concepto, docTipo, docNro, cbteDesde,cbteHasta, impTotConc, impOpEx, impIva, monId, monCotiz, cbtesAsoc, tributos,ivas,opcionales,
-                cbteFch, fchServDesde, fchServHasta, fchVtoPago);
-        }
-
-        private FecaeDetRequest(int concepto, EnumDocTipo docTipo, long docNro, long cbteDesde, long cbteHasta, double impTotConc, double impOpEx, double impIva,
+        public FecaeDetRequest(int concepto, EnumDocTipo docTipo, long docNro, long cbteDesde, long cbteHasta, double impTotConc, double impOpEx, double impIva,
             string monId, double monCotiz, List<CbteAsoc> cbtesAsoc = null, List<Tributo> tributos = null, List<AlicIva> ivas = null, List<Opcional> opcionales = null,
             DateTime? cbteFch = null, DateTime? fchServDesde = null, DateTime? fchServHasta = null, DateTime? fchVtoPago = null)
         {
@@ -61,7 +53,14 @@ namespace ApiFiscal.Core.Domain.Afip.Entity
             Tributos = tributos ?? new List<Tributo>();
             ImpTrib = Tributos.Sum(p => p.Importe);
             ImpTotal = ImpTotConc + ImpNeto + ImpOpEx + ImpTrib + ImpIva;
+            ValidateOnCreate();
         }
+
+        protected override void ValidateOnCreate()
+        {
+            
+        }
+
         public int Concepto { get; set; }
         public EnumDocTipo DocTipo { get; set; }
         public long DocNro { get; set; }

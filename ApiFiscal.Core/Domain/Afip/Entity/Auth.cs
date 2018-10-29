@@ -10,22 +10,17 @@
         /// <param name="cuit">Contribuinte Cuit (representado ou Emitente)</param>
         /// <param name="pathPfx">Caminho do arquivo pfx</param>
         /// <param name="password">Senha do arquivo pfx</param>
-        public static Auth Create(string token, string sign, long cuit, string pathPfx, string password)
-        {
-            var result = new Auth(token, sign, cuit, pathPfx, password);
-            result.ValidateCreate();
-            return result.IsValid ? result : null;
-        }
-
-        private Auth(string token, string sign, long cuit, string pathPfx, string password)
+        public Auth(string token, string sign, long cuit, string pathPfx, string password)
         {
             Token = token;
             Sign = sign;
             Cuit = cuit;
             PathPfx = pathPfx;
             Password = password;
+            ValidateOnCreate();
         }
-        private void ValidateCreate()
+
+        protected override void ValidateOnCreate()
         {
             if (string.IsNullOrEmpty(PathPfx))
             {
@@ -34,7 +29,7 @@
             }
             if (string.IsNullOrEmpty(Password))
             {
-                RaiseError("Password obrigatoria");
+                RaiseError("Password obrigatorio");
                 IsValid = false;
             }
             if (Cuit.ToString().Length < 11)
@@ -77,7 +72,7 @@
         }
 
         /// <summary>
-        /// Retorna o xml de acordo com o Type para requisicoes
+        /// Retorna o xml para obeter o ultimo numero de nota valido
         /// </summary>
         /// <returns></returns>
         public string GetXmlAuthLastAuthorizedNumber(int ptoVta, int cbteTipo)
