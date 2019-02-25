@@ -250,15 +250,15 @@ namespace ApiFiscal.Models
         /// <param name="id">Código de tipo de iva. Consultar método FEParamGetTiposIva</param>
         /// <param name="baseImp">Base tributária para a determinação da alíquota.</param>
         /// <param name="importe">Importaçao</param>
-        public AlicIva(int id, double baseImp, double importe)
+        public AlicIva(int id, decimal baseImp, decimal importe)
         {
             Id = id;
-            BaseImp = new []{2, 3, 7, 8, 52, 53}.Contains(id) ? 0.0 : baseImp;
-            Importe = new[] { 2, 3, 7, 8, 52, 53 }.Contains(id) ? 0.0 : importe;
+            BaseImp = new []{2, 3, 7, 8, 52, 53}.Contains(id) ? 0 : baseImp;
+            Importe = new[] { 2, 3, 7, 8, 52, 53 }.Contains(id) ? 0 : importe;
         }
         public int Id { get; set; }
-        public double BaseImp { get; set; }
-        public double Importe { get; set; }
+        public decimal BaseImp { get; set; }
+        public decimal Importe { get; set; }
     }
 
     public class Iva
@@ -346,7 +346,7 @@ namespace ApiFiscal.Models
             MonCotiz = monCotiz;
             CbtesAsoc = cbtesAsoc ?? new CbtesAsoc();
             Iva = iva ?? new Iva();
-            ImpNeto = iva.AlicIva.Sum(p=> p.BaseImp);
+            ImpNeto = iva.AlicIva.Sum(p=> Convert.ToDouble(p.BaseImp));
             Opcionales = opcionales ?? new Opcionales();
             CbteFch = cbteFch ?? DateTime.Now;
             FchServDesde = fchServDesde ?? DateTime.Now;
