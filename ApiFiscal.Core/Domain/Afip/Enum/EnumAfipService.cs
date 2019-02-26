@@ -1,6 +1,6 @@
-﻿namespace ApiFiscal.Models.Afip
+﻿namespace ApiFiscal.Core.Domain.Afip.Enum
 {
-    public static class EnumAfipPost
+    public class EnumAfipService
     {
         public static string Moedas => "FEParamGetTiposMonedas";
         public static string Ivas => "FEParamGetTiposIva";

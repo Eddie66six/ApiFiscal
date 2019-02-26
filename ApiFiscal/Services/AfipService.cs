@@ -15,156 +15,25 @@ namespace ApiFiscal.Services
 {
     public class AfipService
     {
-        public loginTicketResponse LoginAsync(string caminhoArquivoPfx, string senha)
+        private readonly HttpClient _client;
+        private readonly string _urlApi;
+        public AfipService()
         {
-            var _senha = new NetworkCredential("", senha).SecurePassword;
-            var _servico = "wsfe";
-            var xmlStrLoginTicketRequestTemplate = "<loginTicketRequest><header><uniqueId></uniqueId><generationTime></generationTime><expirationTime></expirationTime></header><service></service></loginTicketRequest>";
-
-            var _globalUniqueID = 1;
-
-            var XmlLoginTicketRequest = new XmlDocument();
-            XmlLoginTicketRequest.LoadXml(xmlStrLoginTicketRequestTemplate);
-
-            var xmlNodoUniqueId = XmlLoginTicketRequest.SelectSingleNode("//uniqueId");
-            var xmlNodoGenerationTime = XmlLoginTicketRequest.SelectSingleNode("//generationTime");
-            var xmlNodoExpirationTime = XmlLoginTicketRequest.SelectSingleNode("//expirationTime");
-            var xmlNodoService = XmlLoginTicketRequest.SelectSingleNode("//service");
-            xmlNodoGenerationTime.InnerText = DateTime.Now.AddMinutes(-2).ToString("s");
-            xmlNodoExpirationTime.InnerText = DateTime.Now.AddMinutes(+2).ToString("s");
-            xmlNodoUniqueId.InnerText = Convert.ToString(_globalUniqueID);
-            xmlNodoService.InnerText = _servico;
-
-            X509Certificate2 objCert = new X509Certificate2(File.ReadAllBytes(caminhoArquivoPfx), _senha, X509KeyStorageFlags.PersistKeySet);
-
-            Encoding EncodedMsg = Encoding.UTF8;
-            byte[] msgBytes = EncodedMsg.GetBytes(XmlLoginTicketRequest.OuterXml);
-            byte[] encodedSignedCms = FirmaBytesMensaje(msgBytes, objCert);
-
-            var cmsFirmadoBase64 = Convert.ToBase64String(encodedSignedCms);
-
-            var servicioWsaa = new LoginCMSClient();
-            var result = servicioWsaa.loginCmsAsync(cmsFirmadoBase64).Result;
-
-            XmlSerializer serializer = new XmlSerializer(typeof(loginTicketResponse));
-            StringReader rdr = new StringReader(result.loginCmsReturn);
-            var retorno = (loginTicketResponse)serializer.Deserialize(rdr);
-            return retorno;
+            _client = new HttpClient();
+            _urlApi = "https://wswhomo.afip.gov.ar/wsfev1/service.asmx?op=";
         }
-
-        public string EmitirNotaAsync(string xml)
-        {
-            try
-            {
-                HttpClient client = new HttpClient();
-                var httpContent = new StringContent(xml, Encoding.UTF8, "text/xml");
-                HttpResponseMessage response = client.PostAsync("https://wswhomo.afip.gov.ar/wsfev1/service.asmx?op=FECAESolicitar", httpContent).Result;
-                var retorno = response.Content.ReadAsStringAsync().Result;
-                return retorno;
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-        }
-
-        public EnvelopeFEParamGetTiposIva ObterTipoIva(string xml)
-        {
-            try
-            {
-                HttpClient client = new HttpClient();
-                var httpContent = new StringContent(xml, Encoding.UTF8, "text/xml");
-                HttpResponseMessage response = client.PostAsync("https://wswhomo.afip.gov.ar/wsfev1/service.asmx?op=FEParamGetTiposIva", httpContent).Result;
-                var result = response.Content.ReadAsStringAsync().Result;
-
-                XmlSerializer serializer = new XmlSerializer(typeof(EnvelopeFEParamGetTiposIva));
-                StringReader rdr = new StringReader(result);
-                var resultingMessage = (EnvelopeFEParamGetTiposIva)serializer.Deserialize(rdr);
-
-                return resultingMessage;
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-        }
-
-        public EnvelopeFEParamGetTiposMonedas ObterTiposMonedas(string xml)
-        {
-            try
-            {
-                HttpClient client = new HttpClient();
-                var httpContent = new StringContent(xml, Encoding.UTF8, "text/xml");
-                HttpResponseMessage response = client.PostAsync("https://wswhomo.afip.gov.ar/wsfev1/service.asmx?op=FEParamGetTiposMonedas", httpContent).Result;
-                var result = response.Content.ReadAsStringAsync().Result;
-
-                XmlSerializer serializer = new XmlSerializer(typeof(EnvelopeFEParamGetTiposMonedas));
-                StringReader rdr = new StringReader(result);
-                var resultingMessage = (EnvelopeFEParamGetTiposMonedas)serializer.Deserialize(rdr);
-
-                return resultingMessage;
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-        }
-
-        public EnvelopeFEParamGetTiposCbte ObterTiposCbte(string xml)
-        {
-            try
-            {
-                HttpClient client = new HttpClient();
-                var httpContent = new StringContent(xml, Encoding.UTF8, "text/xml");
-                HttpResponseMessage response = client.PostAsync("https://wswhomo.afip.gov.ar/wsfev1/service.asmx?op=FEParamGetTiposCbte", httpContent).Result;
-                var result = response.Content.ReadAsStringAsync().Result;
-
-                XmlSerializer serializer = new XmlSerializer(typeof(EnvelopeFEParamGetTiposCbte));
-                StringReader rdr = new StringReader(result);
-                var resultingMessage = (EnvelopeFEParamGetTiposCbte)serializer.Deserialize(rdr);
-
-                return resultingMessage;
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-        }
-
-        public EnvelopeFEParamGetTiposDoc ObterTiposDoc(string xml)
-        {
-            try
-            {
-                HttpClient client = new HttpClient();
-                var httpContent = new StringContent(xml, Encoding.UTF8, "text/xml");
-                HttpResponseMessage response = client.PostAsync("https://wswhomo.afip.gov.ar/wsfev1/service.asmx?op=FEParamGetTiposDoc", httpContent).Result;
-                var result = response.Content.ReadAsStringAsync().Result;
-
-                XmlSerializer serializer = new XmlSerializer(typeof(EnvelopeFEParamGetTiposDoc));
-                StringReader rdr = new StringReader(result);
-                var resultingMessage = (EnvelopeFEParamGetTiposDoc)serializer.Deserialize(rdr);
-
-                return resultingMessage;
-            }
-            catch (Exception e)
-            {
-                return null;
-            }
-        }
-
 
         private static byte[] FirmaBytesMensaje(byte[] argBytesMsg, X509Certificate2 argCertFirmante)
         {
-            const string ID_FNC = "[FirmaBytesMensaje]";
+            const string idFnc = "[FirmaBytesMensaje]";
             try
             {
                 // Pongo el mensaje en un objeto ContentInfo (requerido para construir el obj SignedCms)
-                ContentInfo infoContenido = new ContentInfo(argBytesMsg);
-                SignedCms cmsFirmado = new SignedCms(infoContenido);
+                var infoContenido = new ContentInfo(argBytesMsg);
+                var cmsFirmado = new SignedCms(infoContenido);
 
                 // Creo objeto CmsSigner que tiene las caracteristicas del firmante
-                CmsSigner cmsFirmante = new CmsSigner(argCertFirmante);
-                cmsFirmante.IncludeOption = X509IncludeOption.EndCertOnly;
+                var cmsFirmante = new CmsSigner(argCertFirmante) {IncludeOption = X509IncludeOption.EndCertOnly};
 
                 // Firmo el mensaje PKCS #7
                 cmsFirmado.ComputeSignature(cmsFirmante);
@@ -174,7 +43,142 @@ namespace ApiFiscal.Services
             }
             catch (Exception excepcionAlFirmar)
             {
-                throw new Exception(ID_FNC + "***Error al firmar: " + excepcionAlFirmar.Message);
+                throw new Exception(idFnc + "***Error al firmar: " + excepcionAlFirmar.Message);
+            }
+        }
+
+        public loginTicketResponse LoginAsync(string caminhoArquivoPfx, string senha, ref string error)
+        {
+            var senhaTmp = new NetworkCredential("", senha).SecurePassword;
+            var servico = "wsfe";
+            var xmlStrLoginTicketRequestTemplate = "<loginTicketRequest><header><uniqueId></uniqueId><generationTime></generationTime><expirationTime></expirationTime></header><service></service></loginTicketRequest>";
+
+            var globalUniqueId = 1;
+
+            var xmlLoginTicketRequest = new XmlDocument();
+            xmlLoginTicketRequest.LoadXml(xmlStrLoginTicketRequestTemplate);
+
+            var xmlNodoUniqueId = xmlLoginTicketRequest.SelectSingleNode("//uniqueId");
+            var xmlNodoGenerationTime = xmlLoginTicketRequest.SelectSingleNode("//generationTime");
+            var xmlNodoExpirationTime = xmlLoginTicketRequest.SelectSingleNode("//expirationTime");
+            var xmlNodoService = xmlLoginTicketRequest.SelectSingleNode("//service");
+            xmlNodoGenerationTime.InnerText = DateTime.Now.AddMinutes(-2).ToString("s");
+            xmlNodoExpirationTime.InnerText = DateTime.Now.AddMinutes(+2).ToString("s");
+            xmlNodoUniqueId.InnerText = Convert.ToString(globalUniqueId);
+            xmlNodoService.InnerText = servico;
+
+            var objCert = new X509Certificate2(File.ReadAllBytes(caminhoArquivoPfx), senhaTmp, X509KeyStorageFlags.PersistKeySet);
+
+            var encodedMsg = Encoding.UTF8;
+            var msgBytes = encodedMsg.GetBytes(xmlLoginTicketRequest.OuterXml);
+            var encodedSignedCms = FirmaBytesMensaje(msgBytes, objCert);
+
+            var cmsFirmadoBase64 = Convert.ToBase64String(encodedSignedCms);
+
+            var servicioWsaa = new LoginCMSClient();
+            try
+            {
+                loginCmsResponse result = servicioWsaa.loginCmsAsync(cmsFirmadoBase64).Result;
+                var serializer = new XmlSerializer(typeof(loginTicketResponse));
+                var rdr = new StringReader(result.loginCmsReturn);
+                var retorno = (loginTicketResponse)serializer.Deserialize(rdr);
+                return retorno;
+            }
+            catch (Exception e)
+            {
+                error = e.Message;
+                return null;
+            }
+        }
+
+        public string EmitirNotaAsync(string xml)
+        {
+            try
+            {
+                var httpContent = new StringContent(xml, Encoding.UTF8, "text/xml");
+                var response = _client.PostAsync(_urlApi + "FECAESolicitar", httpContent).Result;
+                var retorno = response.Content.ReadAsStringAsync().Result;
+                return retorno;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public EnvelopeFEParamGetTiposIva ObterTipoIva(string xml)
+        {
+            try
+            {
+                var httpContent = new StringContent(xml, Encoding.UTF8, "text/xml");
+                var response = _client.PostAsync(_urlApi + "FEParamGetTiposIva", httpContent).Result;
+                var result = response.Content.ReadAsStringAsync().Result;
+
+                XmlSerializer serializer = new XmlSerializer(typeof(EnvelopeFEParamGetTiposIva));
+                StringReader rdr = new StringReader(result);
+                var resultingMessage = (EnvelopeFEParamGetTiposIva)serializer.Deserialize(rdr);
+
+                return resultingMessage;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public EnvelopeFEParamGetTiposMonedas ObterTiposMonedas(string xml)
+        {
+            try
+            {
+                var httpContent = new StringContent(xml, Encoding.UTF8, "text/xml");
+                var response = _client.PostAsync(_urlApi + "FEParamGetTiposMonedas", httpContent).Result;
+                var result = response.Content.ReadAsStringAsync().Result;
+
+                var serializer = new XmlSerializer(typeof(EnvelopeFEParamGetTiposMonedas));
+                var obj = (EnvelopeFEParamGetTiposMonedas)serializer.Deserialize(new StringReader(result));
+
+                return obj;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public EnvelopeFEParamGetTiposCbte ObterTiposCbte(string xml)
+        {
+            try
+            {
+                var httpContent = new StringContent(xml, Encoding.UTF8, "text/xml");
+                var response = _client.PostAsync(_urlApi + "FEParamGetTiposCbte", httpContent).Result;
+                var result = response.Content.ReadAsStringAsync().Result;
+
+                var serializer = new XmlSerializer(typeof(EnvelopeFEParamGetTiposCbte));
+                var obj = (EnvelopeFEParamGetTiposCbte)serializer.Deserialize(new StringReader(result));
+                return obj;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        public EnvelopeFEParamGetTiposDoc ObterTiposDoc(string xml)
+        {
+            try
+            {
+                var httpContent = new StringContent(xml, Encoding.UTF8, "text/xml");
+                var response = _client.PostAsync(_urlApi + "FEParamGetTiposDoc", httpContent).Result;
+                var result = response.Content.ReadAsStringAsync().Result;
+
+                var serializer = new XmlSerializer(typeof(EnvelopeFEParamGetTiposDoc));
+                var obj = (EnvelopeFEParamGetTiposDoc)serializer.Deserialize(new StringReader(result));
+
+                return obj;
+            }
+            catch (Exception)
+            {
+                return null;
             }
         }
 
@@ -182,18 +186,16 @@ namespace ApiFiscal.Services
         {
             try
             {
-                HttpClient client = new HttpClient();
                 var httpContent = new StringContent(xml, Encoding.UTF8, "text/xml");
-                HttpResponseMessage response = client.PostAsync("https://wswhomo.afip.gov.ar/wsfev1/service.asmx?op=FEParamGetTiposTributos", httpContent).Result;
+                var response = _client.PostAsync(_urlApi + "=FEParamGetTiposTributos", httpContent).Result;
                 var result = response.Content.ReadAsStringAsync().Result;
 
-                XmlSerializer serializer = new XmlSerializer(typeof(EnvelopeFEParamGetTiposTributos));
-                StringReader rdr = new StringReader(result);
-                var resultingMessage = (EnvelopeFEParamGetTiposTributos)serializer.Deserialize(rdr);
+                var serializer = new XmlSerializer(typeof(EnvelopeFEParamGetTiposTributos));
+                var obj = (EnvelopeFEParamGetTiposTributos)serializer.Deserialize(new StringReader(result));
 
-                return resultingMessage;
+                return obj;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
