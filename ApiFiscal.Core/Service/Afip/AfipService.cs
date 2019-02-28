@@ -66,7 +66,15 @@ namespace ApiFiscal.Core.Service.Afip
             xmlNodoUniqueId.InnerText = Convert.ToString(globalUniqueId);
             xmlNodoService.InnerText = servico;
 
-            var objCert = new X509Certificate2(File.ReadAllBytes(caminhoArquivoPfx), senhaTmp, X509KeyStorageFlags.PersistKeySet);
+            var arquivoPfx = DownloadBlob(caminhoArquivoPfx);
+            if (arquivoPfx == null)
+            {
+                error = "Arquivo pfx não encontrado";
+                return null;
+            }
+
+            //File.ReadAllBytes(caminhoArquivoPfx)
+            var objCert = new X509Certificate2(arquivoPfx, senhaTmp, X509KeyStorageFlags.PersistKeySet);
 
             var encodedMsg = Encoding.UTF8;
             var msgBytes = encodedMsg.GetBytes(xmlLoginTicketRequest.OuterXml);
@@ -125,6 +133,32 @@ namespace ApiFiscal.Core.Service.Afip
             {
                 error = e.Message;
                 return null;
+            }
+        }
+
+        private byte[] DownloadBlob(string path)
+        {
+            var request = WebRequest.Create(path);
+            try
+            {
+                using (var response = request.GetResponse())
+                {
+                    var responseStream = response.GetResponseStream();
+                    var buffer = new byte[16 * 1024];
+                    using (var ms = new MemoryStream())
+                    {
+                        int read;
+                        while ((read = responseStream.Read(buffer, 0, buffer.Length)) > 0)
+                        {
+                            ms.Write(buffer, 0, read);
+                        }
+                        return ms.ToArray();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                 return null;
             }
         }
 
