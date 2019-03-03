@@ -8,6 +8,7 @@ namespace ApiFiscal.Core.Application.Afip.Model
         public string Password { get; set; }
         public string Token { get; set; }
         public string Sign { get; set; }
+        public string ExpirationTime { get; set; }
         public long Cuit { get; set; }
         public int IdIva { get; set; }
         public double Amount { get; set; }

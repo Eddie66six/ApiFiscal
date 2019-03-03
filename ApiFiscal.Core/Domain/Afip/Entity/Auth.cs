@@ -10,13 +10,15 @@
         /// <param name="cuit">Contribuinte Cuit (representado ou Emitente)</param>
         /// <param name="pathPfx">Caminho do arquivo pfx</param>
         /// <param name="password">Senha do arquivo pfx</param>
-        public Auth(string token, string sign, long cuit, string pathPfx, string password)
+        /// <param name="expirationTime"></param>
+        public Auth(string token, string sign, long cuit, string pathPfx, string password, string expirationTime)
         {
             Token = token;
             Sign = sign;
             Cuit = cuit;
             PathPfx = pathPfx;
             Password = password;
+            ExpirationTime = expirationTime;
             ValidateOnCreate();
         }
 
@@ -49,6 +51,7 @@
         public long Cuit { get; }
         public string PathPfx { get; }
         public string Password { get; }
+        public string ExpirationTime { get; set; }
 
         /// <summary>
         /// Retorna o xml de acordo com o Type para requisicoes, exeto para obter ultimo numero
@@ -94,10 +97,11 @@
             return xml;
         }
 
-        public void UpdateCredencial(string token, string sign)
+        public void UpdateCredencial(string token, string sign, string expirationTime)
         {
             Token = token;
             Sign = sign;
+            ExpirationTime = expirationTime;
             if (!string.IsNullOrEmpty(Token) && !string.IsNullOrEmpty(Sign)) return;
             RaiseError("Token/Sign obrigatorio");
             IsValid = false;

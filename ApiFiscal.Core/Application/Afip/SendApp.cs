@@ -30,7 +30,7 @@ namespace ApiFiscal.Core.Application.Afip
                 return null;
             }
             //prepara o obj de login e faz validaçao basica
-            var auth = new Auth(sendModel.Token, sendModel.Sign, sendModel.Cuit, sendModel.PathPfx, sendModel.Password);
+            var auth = new Auth(sendModel.Token, sendModel.Sign, sendModel.Cuit, sendModel.PathPfx, sendModel.Password, sendModel.ExpirationTime);
             if (!auth.IsValid) return null;
 
             var afipApi = new AfipService();
@@ -38,7 +38,7 @@ namespace ApiFiscal.Core.Application.Afip
             {
                 var login = Login(auth, afipApi);
                 if (login == null) return null;
-                auth.UpdateCredencial(login.Credentials.Token, login.Credentials.Sign);
+                auth.UpdateCredencial(login.Credentials.Token, login.Credentials.Sign, login.Header.ExpirationTime);
                 if (!auth.IsValid)
                     return null;
             }
@@ -58,7 +58,7 @@ namespace ApiFiscal.Core.Application.Afip
                 }
                 return new
                 {
-                    Credencial = new { auth.Token, auth.Sign },
+                    Credencial = new { auth.Token, auth.Sign, auth.ExpirationTime },
                     Response = (string)null,
                     Error = xmlUltimoNumero.Body.FECompUltimoAutorizadoResponse.FECompUltimoAutorizadoResult.Errors.Err.Select(p => new ErrorModel(p.Msg, p.Code))
                 };
@@ -87,7 +87,7 @@ namespace ApiFiscal.Core.Application.Afip
 
             return new
             {
-                Credencial = new { auth.Token, auth.Sign },
+                Credencial = new { auth.Token, auth.Sign, auth.ExpirationTime },
                 Response = xml?.Body.FECAESolicitarResponse.FECAESolicitarResult.FeDetResp?.FECAEDetResponse.Select(p => new { p.CAE, p.CAEFchVto, Fecha = xml.Body.FECAESolicitarResponse.FECAESolicitarResult.FeCabResp.FchProceso }),
                 Error = xml == null ? new[] { new ErrorModel(strError, "0") } : xml.Body.FECAESolicitarResponse.FECAESolicitarResult.Errors?.Err.Select(p => new ErrorModel(p.Msg, p.Code))
             };
