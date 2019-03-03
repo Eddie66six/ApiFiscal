@@ -1,4 +1,6 @@
-﻿namespace ApiFiscal.Core.Domain.Afip.Entity
+﻿using System;
+
+namespace ApiFiscal.Core.Domain.Afip.Entity
 {
     public sealed class Auth : BaseEntity
     {
@@ -40,10 +42,13 @@
                 IsValid = false;
             }
         }
-
+        /// <summary>
+        /// para estar logado Valida se os campos token e sign estao preenchido e valida se o expirationTime nao é null e é maior que o datetime now
+        /// </summary>
+        /// <returns></returns>
         public bool IsLogged()
         {
-            return !string.IsNullOrEmpty(Token) && !string.IsNullOrEmpty(Sign);
+            return !string.IsNullOrEmpty(Token) && !string.IsNullOrEmpty(Sign) && !string.IsNullOrEmpty(ExpirationTime) && DateTime.Now < Convert.ToDateTime(ExpirationTime);
         }
 
         public string Token { get; private set; }
@@ -102,8 +107,8 @@
             Token = token;
             Sign = sign;
             ExpirationTime = expirationTime;
-            if (!string.IsNullOrEmpty(Token) && !string.IsNullOrEmpty(Sign)) return;
-            RaiseError("Token/Sign obrigatorio");
+            if (!string.IsNullOrEmpty(Token) && !string.IsNullOrEmpty(Sign) && !string.IsNullOrEmpty(ExpirationTime)) return;
+            RaiseError("Token, Sign e ExpirationTime são obrigatorios");
             IsValid = false;
         }
     }
