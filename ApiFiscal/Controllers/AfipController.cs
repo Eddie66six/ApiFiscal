@@ -20,8 +20,7 @@ namespace ApiFiscal.Controllers
         [HttpPost]
         public Task<ObjectResult> Emitir(SendModel sendModel)
         {
-            return CreateResponse(sendModel);
-            //return CreateResponse(sendModel == null ? null : _sendApp.Send(sendModel));
+            return CreateResponse(_sendApp.Send(sendModel));
         }
         [Route("v1/teste")]
         [HttpPost]
