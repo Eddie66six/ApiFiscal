@@ -97,15 +97,22 @@ namespace ApiFiscal.Core.Application.Afip
         public dynamic Send(SendModel sendModel)
         {
             var reload = false;
-            var result = InternalSend(sendModel, ref reload);
-            if (reload)
+            try
             {
-                sendModel.Token = null;
-                sendModel.Sign = null;
-                result = InternalSend(sendModel, ref reload);
-            }
+                var result = InternalSend(sendModel, ref reload);
+                if (reload)
+                {
+                    sendModel.Token = null;
+                    sendModel.Sign = null;
+                    result = InternalSend(sendModel, ref reload);
+                }
 
-            return result;
+                return result;
+            }
+            catch (System.Exception e)
+            {
+                return e.Message;
+            }
         }
     }
 }
