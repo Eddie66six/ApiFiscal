@@ -22,5 +22,11 @@ namespace ApiFiscal.Controllers
         {
             return CreateResponse(sendModel == null ? null : _sendApp.Send(sendModel));
         }
+        [Route("v1/teste")]
+        [HttpPost]
+        public Task<ObjectResult> Teste()
+        {
+            return CreateResponse("OK");
+        }
     }
 }
