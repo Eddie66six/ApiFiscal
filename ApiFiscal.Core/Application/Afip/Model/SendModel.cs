@@ -1,8 +1,6 @@
-﻿using ApiFiscal.Core.Domain.Afip.Enum;
-
-namespace ApiFiscal.Core.Application.Afip.Model
+﻿namespace ApiFiscal.Core.Application.Afip.Model
 {
-    public class SendModel
+    public sealed class SendModel
     {
         public string PathPfx { get; set; }
         public string Password { get; set; }
