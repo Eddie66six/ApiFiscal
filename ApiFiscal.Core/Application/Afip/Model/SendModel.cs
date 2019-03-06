@@ -1,10 +1,8 @@
-﻿using ApiFiscal.Core.Domain.Afip.Enum;
-
-namespace ApiFiscal.Core.Application.Afip.Model
+﻿namespace ApiFiscal.Core.Application.Afip.Model
 {
     public sealed class SendModel
     {
-        public string BlobPfx { get; set; }
+        public string caminho { get; set; }
         public string Password { get; set; }
         public string Token { get; set; }
         public string Sign { get; set; }
