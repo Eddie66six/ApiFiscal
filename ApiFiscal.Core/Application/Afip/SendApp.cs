@@ -96,7 +96,6 @@ namespace ApiFiscal.Core.Application.Afip
 
         public dynamic Send(SendModel sendModel)
         {
-            return sendModel;
             var reload = false;
             var result = InternalSend(sendModel, ref reload);
             if (reload)
