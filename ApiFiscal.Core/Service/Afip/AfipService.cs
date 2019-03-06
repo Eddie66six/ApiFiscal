@@ -138,7 +138,7 @@ namespace ApiFiscal.Core.Service.Afip
 
         private byte[] DownloadBlob(string path)
         {
-            var request = WebRequest.Create(path);
+            var request = WebRequest.Create(path.TrimEnd("/"));
             try
             {
                 using (var response = request.GetResponse())
