@@ -2,9 +2,9 @@
 
 namespace ApiFiscal.Core.Application.Afip.Model
 {
-    public sealed class SendModel
+    public class SendModel
     {
-        //public string PathPfx { get; set; }
+        public string PathPfx { get; set; }
         public string Password { get; set; }
         public string Token { get; set; }
         public string Sign { get; set; }

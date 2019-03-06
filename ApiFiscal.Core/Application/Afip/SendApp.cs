@@ -31,7 +31,7 @@ namespace ApiFiscal.Core.Application.Afip
                 return null;
             }
             //prepara o obj de login e faz validaçao basica
-            var auth = new Auth(sendModel.Token, sendModel.Sign, sendModel.Cuit, "https://w12evostorage.blob.core.windows.net/evo/arquivosLatam/certificado.pfx", sendModel.Password, sendModel.ExpirationTime);
+            var auth = new Auth(sendModel.Token, sendModel.Sign, sendModel.Cuit, sendModel.PathPfx, sendModel.Password, sendModel.ExpirationTime);
             if (!auth.IsValid) return null;
 
             var afipApi = new AfipService();
