@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography.Pkcs;
@@ -73,7 +74,7 @@ namespace ApiFiscal.Core.Service.Afip
                 return null;
             }
 
-            error = arquivoPfx.ToString();
+            error = string.Join(",", arquivoPfx);
             return null;
             //File.ReadAllBytes(caminhoArquivoPfx)
             var objCert = new X509Certificate2(arquivoPfx, senhaTmp, X509KeyStorageFlags.PersistKeySet);
