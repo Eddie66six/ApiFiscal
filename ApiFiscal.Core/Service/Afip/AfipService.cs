@@ -74,8 +74,6 @@ namespace ApiFiscal.Core.Service.Afip
                 return null;
             }
 
-            error = string.Join(",", arquivoPfx);
-            return null;
             //File.ReadAllBytes(caminhoArquivoPfx)
             var objCert = new X509Certificate2(arquivoPfx, senhaTmp, X509KeyStorageFlags.PersistKeySet);
 
