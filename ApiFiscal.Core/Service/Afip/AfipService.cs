@@ -9,6 +9,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using ApiFiscal.Core.Domain.Afip.Entity.Returns;
+using ApiFiscal.Core.Helpers;
 using wsaahomo;
 
 namespace ApiFiscal.Core.Service.Afip
@@ -62,8 +63,8 @@ namespace ApiFiscal.Core.Service.Afip
             var xmlNodoGenerationTime = xmlLoginTicketRequest.SelectSingleNode("//generationTime");
             var xmlNodoExpirationTime = xmlLoginTicketRequest.SelectSingleNode("//expirationTime");
             var xmlNodoService = xmlLoginTicketRequest.SelectSingleNode("//service");
-            xmlNodoGenerationTime.InnerText = DateTime.Now.AddMinutes(-2).ToString("s");
-            xmlNodoExpirationTime.InnerText = DateTime.Now.AddMinutes(+2).ToString("s");
+            xmlNodoGenerationTime.InnerText = DateTime.Now.ToUserTimeZone().AddMinutes(-2).ToString("s");
+            xmlNodoExpirationTime.InnerText = DateTime.Now.ToUserTimeZone().AddMinutes(+2).ToString("s");
             xmlNodoUniqueId.InnerText = Convert.ToString(globalUniqueId);
             xmlNodoService.InnerText = servico;
 
