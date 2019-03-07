@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using ApiFiscal.Core;
 using ApiFiscal.Core.Application.Afip.Model;
@@ -26,7 +27,7 @@ namespace ApiFiscal.Controllers
         [HttpPost]
         public Task<ObjectResult> Teste()
         {
-            return CreateResponse("OK");
+            return CreateResponse(new { generationTime = DateTime.Now.AddMinutes(-2).ToString("s") });
         }
     }
 }
