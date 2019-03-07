@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ApiFiscal.Core;
 using ApiFiscal.Core.Application.Afip.Model;
 using ApiFiscal.Core.Domain.Afip.Interfaces.Application;
+using ApiFiscal.Core.Helpers;
 
 namespace ApiFiscal.Controllers
 {
@@ -27,7 +28,7 @@ namespace ApiFiscal.Controllers
         [HttpPost]
         public Task<ObjectResult> Teste()
         {
-            return CreateResponse(new { generationTime = DateTime.Now.AddMinutes(-2).ToString("s") });
+            return CreateResponse(new { generationTime = DateTime.UtcNow.ToUserTimeZone().AddMinutes(-2).ToString("s") });
         }
     }
 }

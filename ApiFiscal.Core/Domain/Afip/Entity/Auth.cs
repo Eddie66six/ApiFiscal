@@ -49,7 +49,7 @@ namespace ApiFiscal.Core.Domain.Afip.Entity
         /// <returns></returns>
         public bool IsLogged()
         {
-            return !string.IsNullOrEmpty(Token) && !string.IsNullOrEmpty(Sign) && !string.IsNullOrEmpty(ExpirationTime) && DateTime.Now.ToUserTimeZone() < Convert.ToDateTime(ExpirationTime);
+            return !string.IsNullOrEmpty(Token) && !string.IsNullOrEmpty(Sign) && !string.IsNullOrEmpty(ExpirationTime) && DateTime.UtcNow.ToUserTimeZone() < Convert.ToDateTime(ExpirationTime);
         }
 
         public string Token { get; private set; }

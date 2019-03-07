@@ -63,8 +63,8 @@ namespace ApiFiscal.Core.Service.Afip
             var xmlNodoGenerationTime = xmlLoginTicketRequest.SelectSingleNode("//generationTime");
             var xmlNodoExpirationTime = xmlLoginTicketRequest.SelectSingleNode("//expirationTime");
             var xmlNodoService = xmlLoginTicketRequest.SelectSingleNode("//service");
-            xmlNodoGenerationTime.InnerText = DateTime.Now.ToUserTimeZone().AddMinutes(-2).ToString("s");
-            xmlNodoExpirationTime.InnerText = DateTime.Now.ToUserTimeZone().AddMinutes(+2).ToString("s");
+            xmlNodoGenerationTime.InnerText = DateTime.UtcNow.ToUserTimeZone().AddMinutes(-2).ToString("s");
+            xmlNodoExpirationTime.InnerText = DateTime.UtcNow.ToUserTimeZone().AddMinutes(+2).ToString("s");
             xmlNodoUniqueId.InnerText = Convert.ToString(globalUniqueId);
             xmlNodoService.InnerText = servico;
 
