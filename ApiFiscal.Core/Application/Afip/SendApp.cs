@@ -1,7 +1,6 @@
 ﻿using ApiFiscal.Core.Application.Afip.Model;
 using ApiFiscal.Core.Domain.Afip.Entity;
 using ApiFiscal.Core.Domain.Afip.Entity.Returns;
-using ApiFiscal.Core.Domain.Afip.Enum;
 using ApiFiscal.Core.Domain.Afip.Interfaces.Application;
 using ApiFiscal.Core.Service.Afip;
 using System.Linq;
@@ -79,7 +78,7 @@ namespace ApiFiscal.Core.Application.Afip
             var feCabReq = new FeCabReq(sendModel.CantReg, sendModel.PtoVta, sendModel.CbteTipo);
             var alicIva = new AlicIva(sendModel.IdIva, sendModel.Amount, sendModel.Iva);
 
-            var fEcaeDetRequest = new FecaeDetRequest(sendModel.Concepto, (EnumDocTipo)sendModel.DocTipo, sendModel.DocNro, proximoNumero, proximoNumero, 2.0, 2.0, alicIva.Importe,
+            var fEcaeDetRequest = new FecaeDetRequest(sendModel.Concepto, sendModel.DocTipo, sendModel.DocNro, proximoNumero, proximoNumero, 2.0, 2.0, alicIva.Importe,
                 "PES", 1.0, null, null, new System.Collections.Generic.List<AlicIva>() { alicIva }, null);
             //obtem o xml da nota
             var emitir = new EmitirNota(auth, feCabReq, fEcaeDetRequest);

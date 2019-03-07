@@ -1,4 +1,6 @@
-﻿namespace ApiFiscal.Core.Application.Afip.Model
+﻿using ApiFiscal.Core.Domain.Afip.Enum;
+
+namespace ApiFiscal.Core.Application.Afip.Model
 {
     public sealed class SendModel
     {
@@ -12,7 +14,7 @@
         public double Amount { get; set; }
         public double Iva { get; set; }
         public int Concepto { get; set; }
-        public int DocTipo { get; set; }
+        public EnumDocTipo DocTipo { get; set; }
         public long DocNro { get; set; }
         public int CantReg { get; set; }
         public int PtoVta { get; set; }

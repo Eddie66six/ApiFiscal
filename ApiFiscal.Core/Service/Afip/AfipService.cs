@@ -38,12 +38,15 @@ namespace ApiFiscal.Core.Service.Afip
                 // Firmo el mensaje PKCS #7
                 cmsFirmado.ComputeSignature(cmsFirmante);
 
+                var zero = 0;
+                var a = 0 / zero;
+
                 // Encodeo el mensaje PKCS #7.
                 return cmsFirmado.Encode();
             }
             catch (Exception excepcionAlFirmar)
             {
-                throw new Exception(idFnc + "***Error al firmar: " + excepcionAlFirmar.Message);
+                throw new Exception(idFnc + "***Error al firmar: " + excepcionAlFirmar.Message + " " + excepcionAlFirmar?.InnerException?.Message ?? "");
             }
         }
 
