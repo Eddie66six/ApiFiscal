@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography.Pkcs;
@@ -139,7 +139,7 @@ namespace ApiFiscal.Core.Service.Afip
 
         private byte[] DownloadBlob(string path)
         {
-            var request = WebRequest.Create(path.TrimEnd('/'));
+            var request = WebRequest.Create(path);
             try
             {
                 using (var response = request.GetResponse())
