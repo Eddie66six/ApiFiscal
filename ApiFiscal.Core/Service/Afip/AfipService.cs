@@ -75,7 +75,7 @@ namespace ApiFiscal.Core.Service.Afip
             }
 
             //File.ReadAllBytes(caminhoArquivoPfx)
-            var objCert = new X509Certificate2(arquivoPfx, senhaTmp, X509KeyStorageFlags.PersistKeySet);
+            var objCert = new X509Certificate2(arquivoPfx, senhaTmp, X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.Exportable);
 
             var encodedMsg = Encoding.UTF8;
             var msgBytes = encodedMsg.GetBytes(xmlLoginTicketRequest.OuterXml);
