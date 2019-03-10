@@ -113,5 +113,76 @@ namespace ApiFiscal.Core.Application.Afip
                 return e.Message;
             }
         }
+
+        private dynamic ObterPontoDeVendaInterno(string token, string sign, long cuit, string pathPfx, string password, string expirationTime, ref bool reload)
+        {
+            //prepara o obj de login e faz validaçao basica
+            var auth = new Auth(token, sign, cuit, pathPfx, password, expirationTime);
+            if (!auth.IsValid) return null;
+
+            var afipApi = new AfipService();
+            if (!auth.IsLogged())
+            {
+                var login = Login(auth, afipApi);
+                if (login == null) return null;
+                auth.UpdateCredencial(login.Credentials.Token, login.Credentials.Sign, login.Header.ExpirationTime);
+                if (!auth.IsValid)
+                    return null;
+            }
+
+            string strError = null;
+            //obtem o ultimo numero enviado
+            var pontoDeVenda = afipApi.ObterPontosDeVenda(auth.GetXmlAuth("FEParamGetPtosVenta"), ref strError);
+
+            //verifica erro no ultimo numero enviado
+            if (pontoDeVenda?.Body.FEParamGetPtosVentaResponse.FEParamGetPtosVentaResult.Errors != null)
+            {
+                //login invalido -> retona para tentar relogar
+                if (pontoDeVenda.Body.FEParamGetPtosVentaResponse.FEParamGetPtosVentaResult.Errors.Err.FirstOrDefault(p => p.Code == "600") != null)
+                {
+                    reload = true;
+                    return null;
+                }
+                return new
+                {
+                    Credencial = new { auth.Token, auth.Sign, auth.ExpirationTime },
+                    Response = (string)null,
+                    Error = pontoDeVenda.Body.FEParamGetPtosVentaResponse.FEParamGetPtosVentaResult.Errors.Err.Select(p => new ErrorModel(p.Msg, p.Code))
+                };
+            }
+            //verifica erro no requeste do ultimo numero enviado
+            if (strError != null)
+            {
+                RaiseError(strError);
+                return null;
+            }
+            return new
+            {
+                Credencial = new { auth.Token, auth.Sign, auth.ExpirationTime },
+                Response = pontoDeVenda?.Body.FEParamGetPtosVentaResponse.FEParamGetPtosVentaResult.ResultGet?.PtoVenta?.Select(p => new { p.Nro, p.Bloqueado, p.FchBaja }),
+                Error = pontoDeVenda?.Body?.FEParamGetPtosVentaResponse?.FEParamGetPtosVentaResult?.Errors?.Err?.Select(p => new ErrorModel(p.Msg, p.Code))
+            };
+        }
+
+        public dynamic ObterPontoDeVenda(string token, string sign, long cuit, string pathPfx, string password, string expirationTime)
+        {
+            var reload = false;
+            try
+            {
+                var result = ObterPontoDeVendaInterno(token, sign, cuit, pathPfx, password, expirationTime, ref reload);
+                if (reload)
+                {
+                    token = null;
+                    sign = null;
+                    result = ObterPontoDeVendaInterno(null, null, cuit, pathPfx, password, expirationTime, ref reload);
+                }
+
+                return result;
+            }
+            catch (System.Exception e)
+            {
+                return e.Message;
+            }
+        }
     }
 }

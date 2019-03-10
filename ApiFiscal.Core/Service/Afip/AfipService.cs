@@ -164,6 +164,27 @@ namespace ApiFiscal.Core.Service.Afip
             }
         }
 
+        public FEParamGetPtosVenta ObterPontosDeVenda(string xml, ref string error)
+        {
+            try
+            {
+                var httpContent = new StringContent(xml, Encoding.UTF8, "text/xml");
+                var response = _client.PostAsync(_urlApi + "FEParamGetPtosVenta", httpContent).Result;
+                var result = response.Content.ReadAsStringAsync().Result;
+
+                XmlSerializer serializer = new XmlSerializer(typeof(FEParamGetPtosVenta));
+                StringReader rdr = new StringReader(result);
+                var resultingMessage = (FEParamGetPtosVenta)serializer.Deserialize(rdr);
+
+                return resultingMessage;
+            }
+            catch (Exception e)
+            {
+                error = e.Message;
+                return null;
+            }
+        }
+
         //public EnvelopeFEParamGetTiposIva ObterTipoIva(string xml)
         //{
         //    try

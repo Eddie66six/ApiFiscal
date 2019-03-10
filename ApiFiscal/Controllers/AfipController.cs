@@ -30,5 +30,11 @@ namespace ApiFiscal.Controllers
         {
             return CreateResponse(new { generationTime = DateTime.UtcNow.ToUserTimeZone().AddMinutes(-2).ToString("s") });
         }
+        [Route("v1/ponto-venda")]
+        [HttpGet]
+        public Task<ObjectResult> ObterPontoDeVenda(string token, string sign, long cuit, string pathPfx, string password, string expirationTime)
+        {
+            return CreateResponse(_sendApp.ObterPontoDeVenda(token, sign, cuit, pathPfx, password, expirationTime));
+        }
     }
 }
