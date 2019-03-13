@@ -88,7 +88,8 @@ namespace ApiFiscal.Core.Application.Afip
             return new
             {
                 Credencial = new { auth.Token, auth.Sign, auth.ExpirationTime },
-                Response = xml?.Body.FECAESolicitarResponse.FECAESolicitarResult.FeDetResp?.FECAEDetResponse.Select(p => new { p.CAE, p.CAEFchVto, Fecha = xml.Body.FECAESolicitarResponse.FECAESolicitarResult.FeCabResp.FchProceso }),
+                Response = xml?.Body.FECAESolicitarResponse.FECAESolicitarResult.FeDetResp?.FECAEDetResponse.Select(p =>
+                    new { p.CAE, p.CAEFchVto, Fecha = xml.Body.FECAESolicitarResponse.FECAESolicitarResult.FeCabResp.FchProceso, NumeroNf = proximoNumero }),
                 Error = xml == null ? new[] { new ErrorModel(strError, "0") } : xml.Body.FECAESolicitarResponse.FECAESolicitarResult.Errors?.Err.Select(p => new ErrorModel(p.Msg, p.Code))
             };
         }
