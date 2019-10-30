@@ -15,3 +15,6 @@ https://github.com/reingart/pyafipws/
 doc api soap
 
 http://www.afip.gob.ar/fe/documentos/manual_desarrollador_COMPG_v2_12.pdf#page=8&zoom=100,0,294
+
+gerar sertificado
+https://www.afip.gob.ar/ws/WSAA/WSAA.ObtenerCertificado.pdf
