@@ -18,3 +18,11 @@ http://www.afip.gob.ar/fe/documentos/manual_desarrollador_COMPG_v2_12.pdf#page=8
 
 gerar sertificado
 https://www.afip.gob.ar/ws/WSAA/WSAA.ObtenerCertificado.pdf
+
+
+http://www.afip.gob.ar/ws/documentacion/wsaa.asp
+http://www.afip.gob.ar/ws/WSAA/wsaa_obtener_certificado_produccion.pdf
+
+--Administración de Certificados Digitales
+	Administre aquí sus Certificados Digitales para webservices
+
