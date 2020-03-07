@@ -16,13 +16,13 @@ doc api soap
 
 http://www.afip.gob.ar/fe/documentos/manual_desarrollador_COMPG_v2_12.pdf#page=8&zoom=100,0,294
 
-gerar sertificado
+gerar certificado
 https://www.afip.gob.ar/ws/WSAA/WSAA.ObtenerCertificado.pdf
 
 
 http://www.afip.gob.ar/ws/documentacion/wsaa.asp
 http://www.afip.gob.ar/ws/WSAA/wsaa_obtener_certificado_produccion.pdf
 
---Administración de Certificados Digitales
-	Administre aquí sus Certificados Digitales para webservices
+--AdministraciÃ³n de Certificados Digitales
+	Administre aquÃ­ sus Certificados Digitales para webservices
 
